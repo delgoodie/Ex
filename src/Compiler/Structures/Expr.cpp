@@ -2,61 +2,9 @@
 
 #include <sstream>
 
+#include "EvalLink.h"
+
 namespace Compiler {
-    Expr::Expr(const Expr& expr)
-    {
-        type = expr.type;
-        switch (type) {
-        case Type::EX_BOOLEAN:
-            boolean = expr.boolean;
-            break;
-        case Type::EX_NUMBER:
-            number = expr.number;
-            break;
-        case Type::EX_STRING:
-            string = expr.string;
-            break;
-        case Type::EX_VARIABLE:
-            variable = expr.variable;
-            break;
-        case Type::EX_OBJECT:
-            object = expr.object;
-            break;
-        case Type::EX_NULL:
-            boolean = false;
-            break;
-        }
-    }
-    
-    Expr& Expr::operator=(const Expr& expr) {
-        type = expr.type;
-        switch (type) {
-        case Type::EX_BOOLEAN:
-            boolean = expr.boolean;
-            break;
-        case Type::EX_NUMBER:
-            number = expr.number;
-            break;
-        case Type::EX_STRING:
-            string = expr.string;
-            break;
-        case Type::EX_VARIABLE:
-            variable = expr.variable;
-            break;
-        case Type::EX_OBJECT:
-            object = expr.object;
-            break;
-        case Type::EX_NULL:
-            boolean = false;
-            break;
-        }
-    }
-
-    Expr::~Expr() {
-        if (type == Type::EX_STRING) string.~basic_string();
-        else if (type == Type::EX_VARIABLE) variable.~basic_string();
-    }
-
     std::string Expr::TypeToString(Expr::Type type)
     {
         switch (type)
@@ -76,7 +24,7 @@ namespace Compiler {
         }
     }
 
-    std::string Expr::ToString()
+    std::string Expr::ToString() const
     {
         std::stringstream ss;
         switch (type)

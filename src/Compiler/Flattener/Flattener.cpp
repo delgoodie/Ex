@@ -1,5 +1,7 @@
 #include "Flattener.h"
 
+#include <iostream>
+
 #include "../CompilerCore.h"
 
 
@@ -53,4 +55,36 @@ namespace Compiler {
 
         return head;
     }
+
+	namespace Debug {
+		void PrintLinkChain(EvalLink* head)
+		{
+			std::printf("Printing Link Chain:\n");
+
+			EvalLink* current = head;
+			while (current)
+			{
+				if (current->lhs)
+					std::printf("L");
+				if (current->rhs)
+					std::printf("R");
+				std::printf(" ");
+
+				if (current->type == EvalLink::Type::EXPR)
+					std::printf(current->expr.ToString().c_str());
+				else if (current->type == EvalLink::Type::OP)
+					std::printf(Operator::STR[current->op_index]);
+
+				if (current->side == EvalLink::Side::LHS)
+					std::printf(" L");
+				else if (current->side == EvalLink::Side::RHS)
+					std::printf(" R");
+
+				current = current->next;
+				if (current)
+					std::printf("  ->  ");
+			}
+			std::printf("\n\n");
+		}
+	}
 }

@@ -1,3 +1,4 @@
 .vs/
 Debug/
 **.exe
+bin-int/

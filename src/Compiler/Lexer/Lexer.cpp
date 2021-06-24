@@ -1,10 +1,11 @@
-#include "Lex.h"
+#include "Lexer.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
+#include <string.h>
 
 #include "../CompilerCore.h"
 
@@ -53,19 +54,37 @@ static std::string FileToString(const std::string& filename)
 
 namespace Compiler
 {
-    std::vector<Token> Lex(const std::string& code)
+	static bool IsOperator(const char* string)
+	{
+		for (int i = 0; i < NUM_OPS; i++)
+			if (strlen(Operator::STR[i]) == strlen(string)) {
+				bool f = true;
+				for (int j = 0; j < strlen(string); j++)
+					if (Operator::STR[i][j] != string[j]) f = false;
+				if (f) return true;
+			}
+		return false;
+	}
+
+
+    std::vector<Token> Lex(const char* code)
     {
         std::vector<Token> tokens;
 
-        int code_length = code.length(), lineNumber = 0, i = 0;
+        int code_length = strlen(code), lineNumber = 0, i = 0;
         bool varFlag = false;
         while (i < code_length)
         {
-            if (code[i] == '\n') // Line
+            if (code[i] == '\n') // New Line
             {
                 lineNumber++;
                 i++;
             }
+			else if (code[i] == ' ' || code[i] == '\t') // Whitespace
+			{
+				varFlag = false;
+				i++;
+			}
             else if (code[i] == '\'' || code[i] == '\"') // String
             {
                 varFlag = false;
@@ -119,15 +138,17 @@ namespace Compiler
             else // Operators & Variables
             {
                 bool found = false;
-                std::string op;
                 // Check for operator
                 for (int j = 4; j > 0; j--)
                 {
                     if (i + j - 1 < code_length)
                     {
-                        if (Operator::IsOperator(code.substr(i, j)))
+						char op_buf[5];
+						memcpy(op_buf, &code[i], j);
+						op_buf[j] = '\0';
+                        if (IsOperator(op_buf))
                         {
-                            tokens.emplace_back(Token::Type::OP, code.substr(i, j), lineNumber);
+                            tokens.emplace_back(Token::Type::OP, std::string(op_buf), lineNumber);
                             varFlag = false;
                             found = true;
                             i += j;
@@ -152,12 +173,9 @@ namespace Compiler
 
     namespace Debug
     {
-        bool Enabled = false;
         void PrintTokens(const std::vector<Token>& tokens)
         {
-            if (!Enabled)
-                return;
-            std::printf("TOKENS:\n");
+            std::printf("Printing Tokens List:\n");
             for (int i = 0; i < tokens.size(); i++)
             {
                 char begin, end;
@@ -180,13 +198,13 @@ namespace Compiler
                     end = '`';
                     break;
                 case Token::Type::PRE:
-                    begin = '{';
-                    end = '}';
+                    begin = '_';
+                    end = '_';
                     break;
                 }
                 std::printf(" %c%s%c ", begin, tokens[i].value.c_str(), end);
             }
-            std::printf("\n");
+            std::printf("\n\n");
         }
     }
 }

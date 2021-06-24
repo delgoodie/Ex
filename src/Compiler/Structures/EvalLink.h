@@ -26,6 +26,7 @@ namespace Compiler {
 
         EvalLink(Side s, Expr x) : type(Type::EXPR), side(s), expr(x), lhs(false), rhs(false), next(nullptr) {}
         EvalLink(Side s, bool l, bool r, int oi) : type(Type::OP), side(s), lhs(l), rhs(r), op_index(oi), next(nullptr) {}
+		~EvalLink();
 
         unsigned char Flags();
     };

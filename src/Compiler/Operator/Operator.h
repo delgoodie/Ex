@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "../CompilerCore.h"
+
 namespace Compiler {
     namespace Operator
     {
@@ -140,9 +142,5 @@ namespace Compiler {
             true,  // ,
             false  // ,
         };
-
-        bool IsOperator(std::string str);
-
-        int GetOperatorIndex(std::string str, bool lhs, bool rhs);
-    }
+	}
 }

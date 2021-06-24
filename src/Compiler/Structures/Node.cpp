@@ -3,18 +3,7 @@
 #include "../CompilerCore.h"
 
 namespace Compiler {
-
-    Node::Node(const Node& node) {
-        type = node.type;
-        if (type == Type::EXPR) expr = node.expr;
-        else op = node.op;
-        lhs = node.lhs;
-        rhs = node.rhs;
-        expanded = node.expanded;
-        flattened = node.flattened;
-    }
-
-    std::string Node::ToString()
+    std::string Node::ToString() const
     {
         if (type == Type::OP)
             return Operator::STR[op.index];

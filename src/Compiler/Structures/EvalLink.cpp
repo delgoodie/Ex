@@ -1,6 +1,11 @@
 #include "EvalLink.h"
 
 namespace Compiler {
+	EvalLink::~EvalLink() {
+		delete next;
+	}
+
+
     unsigned char EvalLink::Flags()
     {
         // TODO: use for unused bits?

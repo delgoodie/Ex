@@ -6,6 +6,9 @@
 
 #include "../CompilerCore.h"
 
+#include "../Expander/Expander.h"
+#include "../Flattener/Flattener.h"
+
 /*
 The parser intakes a flat list of tokens
 
@@ -19,22 +22,21 @@ The final result is a linked list of the Link struct which is ready for evaluati
 into a bin equivalent so as to separate Lex & Parsing with Evaluation thus speeding up the program
 */
 
-static int Pow2(int exp)
-{
-    int num = 1;
-    for (int i = 0; i < exp; i++)
-        num *= 2;
-    return num;
-}
-
-static void PrintSpaces(int num_spaces)
-{
-    for (int i = 0; i < num_spaces; i++)
-        std::printf(" ");
-}
-
 namespace Compiler
 {
+
+	static int GetOperatorIndex(std::string str, bool lhs, bool rhs)
+	{
+		for (int i = 0; i < NUM_OPS; i++)
+			if (lhs == Operator::LHS[i] && rhs == Operator::RHS[i] && str.length() == strlen(Operator::STR[i]))
+			{
+				bool f = true;
+				for (int j = 0; j < str.length(); j++)
+					if (Operator::STR[i][j] != str[j]) f = false;
+				if (f) return i;
+			}
+		return -1;
+	}
 
     /*
             Iterates over flat Token list Converts each Token or group of tokens into it's respective Type:
@@ -46,17 +48,17 @@ namespace Compiler
 
             Temporarily uses lhs & rhs pointers as booleans
         */
-    std::vector<Node> ConvertTokens(std::vector<Token>& tokens)
+    std::vector<Node> Parse(const std::vector<Token>& tokens)
         {
             std::vector<Node> flatNodes;
 
             for (int i = 0; i < tokens.size(); i++)
             {
-                if (tokens[i].type == Token::Type::NUM)
+				if (tokens[i].type == Token::Type::NUM)
                     flatNodes.emplace_back(Expr((ex_number_t)std::stod(tokens[i].value)));
-                else if (tokens[i].type == Token::Type::STR)
+				else if (tokens[i].type == Token::Type::STR)
                     flatNodes.emplace_back(Expr(tokens[i].value));
-                else if (tokens[i].type == Token::Type::VAR)
+				else if (tokens[i].type == Token::Type::VAR)
                     flatNodes.emplace_back(Expr(tokens[i].value, nullptr));
                 else if (tokens[i].type == Token::Type::OP)
                 {
@@ -64,20 +66,20 @@ namespace Compiler
                     int op_index = -1;
 
                     bool lhs = i > 0 && (tokens[i - 1].type != Token::Type::OP || !Operator::RHS[flatNodes.back().op.index]);
-                    bool canRhs = Operator::GetOperatorIndex(tokens[i].value, lhs, true) != -1;
-                    bool canNotRhs = Operator::GetOperatorIndex(tokens[i].value, lhs, false) != -1;
+                    bool canRhs = GetOperatorIndex(tokens[i].value, lhs, true) != -1;
+                    bool canNotRhs = GetOperatorIndex(tokens[i].value, lhs, false) != -1;
 
                     if (canRhs ^ canNotRhs)
                     {
-                        op_index = Operator::GetOperatorIndex(tokens[i].value, lhs, canRhs);
+                        op_index = GetOperatorIndex(tokens[i].value, lhs, canRhs);
                     }
                     else if (canRhs && canNotRhs)
                     {
                         bool rhs = i + 1 < tokens.size() &&
                             (tokens[i + 1].type == Token::Type::OP ||
-                                (Operator::GetOperatorIndex(tokens[i + 1].value, false, true) != -1 ||
-                                    Operator::GetOperatorIndex(tokens[i + 1].value, false, false) != -1));
-                        op_index = Operator::GetOperatorIndex(tokens[i].value, lhs, rhs);
+                                (GetOperatorIndex(tokens[i + 1].value, false, true) != -1 ||
+                                    GetOperatorIndex(tokens[i + 1].value, false, false) != -1));
+                        op_index = GetOperatorIndex(tokens[i].value, lhs, rhs);
                     }
                     else
                     {
@@ -91,7 +93,6 @@ namespace Compiler
                     int bracket_count = 1;
                     std::string bracket_str = tokens[i].value;
                     std::string close_bracket_str;
-                    Object object;
                     //TODO: handle () and []
                     if (bracket_str.compare("{") == 0)
                         close_bracket_str = "}";
@@ -101,7 +102,7 @@ namespace Compiler
                         close_bracket_str = ")";
 
                     int j = i + 1;
-                    while (tokens[j].type != Token::Type::PRE || tokens[j].value.compare(bracket_str) != 0 || bracket_count != 0)
+                    while (bracket_count != 0)
                     {
                         // Bracket Count Update
                         if (tokens[j].type == Token::Type::PRE)
@@ -114,140 +115,33 @@ namespace Compiler
                         j++;
                     }
 
-                    // i = index of {, j = index of }
+                    // i = index of {, j = index after }
                     std::vector<Token>::const_iterator first = tokens.begin() + i + 1;
-                    std::vector<Token>::const_iterator last = tokens.begin() + j;
+                    std::vector<Token>::const_iterator last = tokens.begin() + j - 1;
                     std::vector<Token> token_flat(first, last);
 
-                    object.node_flat = ConvertTokens(token_flat);
-                    object.node_tree = BuildNodeTree(object.node_flat);
-                    object.link_head = FlattenNodeTree(object.node_tree);
+					std::vector<Node> node_flat = Parse(token_flat);
+                    Node* node_tree = Expand(node_flat);
+                    EvalLink* object = Flatten(node_tree);
 
                     flatNodes.emplace_back(Expr(object));
+
                     // Advance i to j (which will be } but for loop increments i as well)
                     i = j;
                 }
             }
-
-            // * Easy way to view op indicies
-            // int op_indexes[20];
-            // for (int i = 0; i < flatNodes.size(); i++)
-            //     op_indexes[i] = flatNodes[i].op.index;
 
             return flatNodes;
         }
 
    namespace Debug
     {
-        bool Enabled = false;
-        void PrintNodeFlat(std::vector<Node>& flat)
+        void PrintNodeFlat(const std::vector<Node>& node_flat)
         {
-            if (!Enabled)
-                return;
             std::printf("Printing Flat Node List:\n");
-            for (int i = 0; i < flat.size(); i++)
-            {
-                std::printf("%s ", flat[i].ToString().c_str());
-            }
-            std::printf("\n");
+            for (int i = 0; i < node_flat.size(); i++)
+                std::printf("%s ", node_flat[i].ToString().c_str());
+            std::printf("\n\n");
         }
-
-        void PrintNodeTree(Node* root)
-        {
-            if (!Enabled)
-                return;
-            std::printf("Printing Node Tree:\n\n");
-            int depth = 0;
-            int num_spaces = 64;
-            int it = 1;
-            bool no_children = false;
-
-            while (!no_children)
-            {
-                PrintSpaces(num_spaces / 2);
-                no_children = true;
-                for (int i = 1; i <= it; i++)
-                {
-                    Node* n = root;
-                    for (int d = 1; d <= depth; d++)
-                    {
-                        if (((i - 1) / Pow2(depth - d)) % 2 == 0)
-                        {
-                            if (n)
-                                n = n->lhs;
-                            else
-                                break;
-                        }
-                        else
-                        {
-                            if (n)
-                                n = n->rhs;
-                            else
-                                break;
-                        }
-                    }
-
-                    if (n)
-                    {
-                        std::printf(n->ToString().c_str());
-                        no_children = false;
-                    }
-                    PrintSpaces(num_spaces);
-                }
-
-                std::printf("\n\n");
-
-                depth++;
-                num_spaces /= 2;
-                it = Pow2(depth);
-            }
-            std::printf("\n");
-        }
-
-        void PrintLinkChain(EvalLink* head)
-        {
-            if (!Enabled)
-                return;
-            std::printf("Printing Link Chain:\n");
-
-            EvalLink* current = head;
-            while (current)
-            {
-                if (current->lhs)
-                    std::printf("L");
-                if (current->rhs)
-                    std::printf("R");
-                std::printf(" ");
-
-                if (current->type == EvalLink::Type::EXPR)
-                    std::printf(current->expr.ToString().c_str());
-                else if (current->type == EvalLink::Type::OP)
-                    std::printf(Operator::STR[current->op_index]);
-
-                if (current->side == EvalLink::Side::LHS)
-                    std::printf(" L");
-                else if (current->side == EvalLink::Side::RHS)
-                    std::printf(" R");
-
-                current = current->next;
-                if (current)
-                    std::printf("  ->  ");
-            }
-            std::printf("\n");
-        }
-    }
-
-    EvalLink* Exec(std::vector<Token>& tokens)
-    {
-        std::vector<Node> flatNodes = Pipeline::ConvertTokens(tokens);
-        Debug::PrintNodeFlat(flatNodes);
-
-        Node* root = Pipeline::BuildNodeTree(flatNodes);
-        Debug::PrintNodeTree(root);
-
-        EvalLink* head = Pipeline::FlattenNodeTree(root);
-        Debug::PrintLinkChain(head);
-
-        return head;
     }
 }

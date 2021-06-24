@@ -2,9 +2,13 @@
 
 #include <string>
 
-#include "../CompilerCore.h"
+#include "../../Core.h"
+
 
 namespace Compiler {
+
+	struct EvalLink;
+
     struct Expr
     {
         enum class Type
@@ -17,29 +21,22 @@ namespace Compiler {
             EX_NULL
         };
         Type type;
-        union
-        {
-            ex_boolean_t boolean;
-            ex_number_t number;
-            std::string string;
-            std::string variable;
-            Object object;
-        };
+        ex_boolean_t boolean;
+        ex_number_t number;
+        std::string string;
+		std::string variable;
+        EvalLink* object;
 
         Expr() : type(Type::EX_NULL) {}
         Expr(ex_boolean_t b) : type(Type::EX_BOOLEAN), boolean(b) {}
         Expr(ex_number_t n) : type(Type::EX_NUMBER), number(n) {}
         Expr(std::string s) : type(Type::EX_STRING), string(s) {}
         Expr(std::string n, std::nullptr_t* v) : type(Type::EX_VARIABLE), variable(n) {}
-        Expr(Object o) : type(Type::EX_OBJECT), object(o) {}
+        Expr(EvalLink* o) : type(Type::EX_OBJECT), object(o) {}
         Expr(std::nullptr_t null) : type(Type::EX_NULL) {}
-
-        Expr(const Expr& expr);
-        Expr& operator=(const Expr& expr);
-        ~Expr();
 
         static std::string TypeToString(Expr::Type type);
 
-        std::string ToString();
+        std::string ToString() const;
     };
 }

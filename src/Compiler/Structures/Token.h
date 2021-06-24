@@ -16,5 +16,6 @@ namespace Compiler {
         Type type;
         std::string value;
         int line;
+		Token(Type t, std::string v, int l) : type(t), value(v), line(l) {}
     };
 }

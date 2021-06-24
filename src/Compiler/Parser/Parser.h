@@ -4,17 +4,11 @@
 
 #include "../CompilerCore.h"
 
-namespace Compiler::Parser
+namespace Compiler
 {
-    namespace Pipeline
-    {
-        std::vector<Node> ConvertTokens(std::vector<Token>& tokens);
-        Node* BuildNodeTree(std::vector<Node>& flatNodes);
-        EvalLink* FlattenNodeTree(Node* root);
-    }
+	std::vector<Node> Parse(const std::vector<Token>& tokens);
     namespace Debug
     {
-        extern bool Enabled;
+		void PrintNodeFlat(const std::vector<Node>& node_flat);
     }
-    EvalLink* Exec(std::vector<Token>& tokens);
 }

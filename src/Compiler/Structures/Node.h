@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "../CompilerCore.h"
+#include "Expr.h"
 
 namespace Compiler {
     struct Node
@@ -13,23 +13,19 @@ namespace Compiler {
             EXPR
         };
         Type type;
-        union
-        {
-            Expr expr;
-            struct {
-                int index;
-                int jump;
-            } op;
-        };
+        Expr expr;
+        struct {
+            int index;
+            int jump;
+        } op;
 
         Node* lhs;
         Node* rhs;
         bool expanded;
         bool flattened;
 
-        Node(Expr x) : type(Type::EXPR), expr(x), lhs(nullptr), rhs(nullptr), expanded(false), flattened(false) {}
-        Node(int i) : type(Type::OP), op({ i, 0 }), lhs(nullptr), rhs(nullptr), expanded(false), flattened(false) {}
-        Node(const Node& node);
-        std::string ToString();
+		Node(Expr x) : type(Type::EXPR), expr(x), op({-1, 0}), lhs(nullptr), rhs(nullptr), expanded(false), flattened(false) {}
+        Node(int i) : type(Type::OP), op({ i, 0 }), expr(Expr(nullptr)), lhs(nullptr), rhs(nullptr), expanded(false), flattened(false) {}
+        std::string ToString() const;
     };
 }
