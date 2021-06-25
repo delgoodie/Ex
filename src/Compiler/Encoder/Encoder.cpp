@@ -56,7 +56,7 @@ namespace Compiler
         // Allocate blob on heap
         unsigned char* data = (unsigned char*)malloc(size);
 
-		memset(data, '0', size);
+		memset(data, 0, size);
 
         // Write each link onto heap sequentially
         int index = 0;
@@ -89,6 +89,8 @@ namespace Compiler
                     break;
                 case Expr::Type::EX_OBJECT:
                     Blob obj = Encode(link->expr.object);
+					memcpy(&data[index], &obj.size, sizeof(size_t));
+					index += sizeof(size_t);
                     memcpy(&data[index], obj.data, obj.size); // * Write eval chain (n bytes)
                     index += obj.size;
                     delete obj.data;
@@ -107,10 +109,6 @@ namespace Compiler
 
     namespace Debug
     {
-        void PrintBlob(const Blob& blob)
-        {
-        }
-
 		void PrintRawBlob(Blob blob) {
 			std::printf("Printing Raw Blob:");
 			for (int i = 0; i < blob.size; i++) {
@@ -120,6 +118,5 @@ namespace Compiler
 			}
 			std::printf("\n\n");
 		}
-
-    }
+	}
 }

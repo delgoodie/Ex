@@ -11,7 +11,7 @@ namespace Compiler {
 
     struct Expr
     {
-        enum class Type
+        enum class Type : unsigned char
         {
             EX_BOOLEAN,
             EX_NUMBER,

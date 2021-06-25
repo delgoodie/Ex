@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Evaluator\Evaluator.cpp" />
+    <ClCompile Include="src\Evaluator\Structures\Context.cpp" />
+    <ClCompile Include="src\Evaluator\Operator\Operator.cpp" />
+    <ClCompile Include="src\Evaluator\Loader\Loader.cpp" />
     <ClCompile Include="src\Compiler\Compiler.cpp" />
     <ClCompile Include="src\Compiler\Encoder\Encoder.cpp" />
     <ClCompile Include="src\Compiler\Expander\Expander.cpp" />
@@ -28,12 +32,23 @@
     <ClCompile Include="src\Compiler\Structures\EvalLink.cpp" />
     <ClCompile Include="src\Compiler\Structures\Expr.cpp" />
     <ClCompile Include="src\Compiler\Structures\Node.cpp" />
+    <ClCompile Include="src\Evaluator\Evaluator\Evaluator.cpp" />
+    <ClCompile Include="src\Evaluator\Structures\EvalLink.cpp" />
+    <ClCompile Include="src\Evaluator\Structures\Expr.cpp" />
     <ClCompile Include="src\Ex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Evaluator\Evaluator.h" />
+    <ClInclude Include="src\Blob.h" />
+    <ClInclude Include="src\Evaluator\EvaluatorCore.h" />
+    <ClInclude Include="src\Evaluator\Structures\Context.h" />
+    <ClInclude Include="src\Evaluator\Structures\Heap.h" />
+    <ClInclude Include="src\Evaluator\Operator\Operator.h" />
+    <ClInclude Include="src\Evaluator\Loader\Loader.h" />
     <ClInclude Include="src\Compiler\Compiler.h" />
     <ClInclude Include="src\Compiler\CompilerCore.h" />
     <ClInclude Include="src\Compiler\Encoder\Encoder.h" />
@@ -47,13 +62,21 @@
     <ClInclude Include="src\Compiler\Parser\Parser.h" />
     <ClInclude Include="src\Compiler\Structures\Token.h" />
     <ClInclude Include="src\Core.h" />
+    <ClInclude Include="src\Evaluator\Evaluator\Evaluator.h" />
+    <ClInclude Include="src\Evaluator\Structures\EvalLink.h" />
+    <ClInclude Include="src\Evaluator\Structures\Expr.h" />
+    <ClInclude Include="src\Evaluator\Structures\ListLink.h" />
+    <ClInclude Include="src\Evaluator\Structures\Object.h" />
+    <ClInclude Include="src\Evaluator\Structures\StringLink.h" />
+    <ClInclude Include="src\Evaluator\Structures\VarLink.h" />
+    <ClInclude Include="src\Evaluator\Structures\Stack.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{474cf115-022e-4e5d-9771-64efe7278e61}</ProjectGuid>
     <RootNamespace>Ex</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,7 +95,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">

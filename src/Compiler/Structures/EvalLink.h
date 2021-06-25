@@ -5,12 +5,12 @@
 namespace Compiler {
     struct EvalLink
     {
-        enum class Type
+        enum class Type : unsigned char
         {
             OP,
             EXPR
         };
-        enum class Side
+        enum class Side : unsigned char
         {
             LHS,
             RHS
@@ -29,5 +29,11 @@ namespace Compiler {
 		~EvalLink();
 
         unsigned char Flags();
+
+        static Type TypeFromFlags(unsigned char flags);
+        static Side SideFromFlags(unsigned char flags);
+        static bool LhsFromFlags(unsigned char flags);
+        static bool RhsFromFlags(unsigned char flags);
+        static bool NullFromFlags(unsigned char flags);
     };
 }
