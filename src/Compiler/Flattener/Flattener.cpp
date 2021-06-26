@@ -6,12 +6,12 @@
 
 
 namespace Compiler {
-    EvalLink* Flatten(Node* root)
+    EvalLink_Comp* Flatten(Node_Comp* root)
     {
-        EvalLink* head = nullptr, * prev = nullptr, * link = nullptr;
+        EvalLink_Comp* head = nullptr, * prev = nullptr, * link = nullptr;
         do
         {
-            Node* deepest = root, * parent = nullptr;
+            Node_Comp* deepest = root, * parent = nullptr;
             bool isLhs = true;
             // find deepest (highest prec node)
             while (true)
@@ -33,10 +33,10 @@ namespace Compiler {
             }
 
             // remove node and add to link
-            if (deepest->type == Node::Type::OP)
-                link = new EvalLink(isLhs ? EvalLink::Side::LHS : EvalLink::Side::RHS, deepest->lhs, deepest->rhs, deepest->op.index);
-            else if (deepest->type == Node::Type::EXPR)
-                link = new EvalLink(isLhs ? EvalLink::Side::LHS : EvalLink::Side::RHS, deepest->expr);
+            if (deepest->type == Node_Comp::Type::OP)
+                link = new EvalLink_Comp(isLhs ? EvalLink_Comp::Side::LHS : EvalLink_Comp::Side::RHS, deepest->lhs, deepest->rhs, deepest->op.index);
+            else if (deepest->type == Node_Comp::Type::EXPR)
+                link = new EvalLink_Comp(isLhs ? EvalLink_Comp::Side::LHS : EvalLink_Comp::Side::RHS, deepest->expr);
 
             deepest->flattened = true;
 
@@ -57,11 +57,11 @@ namespace Compiler {
     }
 
 	namespace Debug {
-		void PrintLinkChain(EvalLink* head)
+		void PrintLinkChain(EvalLink_Comp* head)
 		{
 			std::printf("Printing Link Chain:\n");
 
-			EvalLink* current = head;
+			EvalLink_Comp* current = head;
 			while (current)
 			{
 				if (current->lhs)
@@ -70,14 +70,14 @@ namespace Compiler {
 					std::printf("R");
 				std::printf(" ");
 
-				if (current->type == EvalLink::Type::EXPR)
+				if (current->type == EvalLink_Comp::Type::EXPR)
 					std::printf(current->expr.ToString().c_str());
-				else if (current->type == EvalLink::Type::OP)
-					std::printf(Operator::STR[current->op_index]);
+				else if (current->type == EvalLink_Comp::Type::OP)
+					std::printf(Operator::STR[current->op.index]);
 
-				if (current->side == EvalLink::Side::LHS)
+				if (current->side == EvalLink_Comp::Side::LHS)
 					std::printf(" L");
-				else if (current->side == EvalLink::Side::RHS)
+				else if (current->side == EvalLink_Comp::Side::RHS)
 					std::printf(" R");
 
 				current = current->next;

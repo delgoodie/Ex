@@ -4,7 +4,7 @@
 
 namespace Compiler
 {
-	Blob Encode(EvalLink* head);
+	Blob Encode(EvalLink_Comp* head);
 
 	namespace Debug {
 		void PrintRawBlob(Blob blob);

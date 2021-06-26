@@ -67,9 +67,9 @@ namespace Compiler
 	}
 
 
-    std::vector<Token> Lex(const char* code)
+    std::vector<Token_Comp> Lex(const char* code)
     {
-        std::vector<Token> tokens;
+        std::vector<Token_Comp> tokens;
 
         int code_length = strlen(code), lineNumber = 0, i = 0;
         bool varFlag = false;
@@ -100,7 +100,7 @@ namespace Compiler
                     else
                         str.push_back(code[j]);
                 }
-                tokens.emplace_back(Token::Type::STR, str, lineNumber);
+                tokens.emplace_back(Token_Comp::Type::STR, str, lineNumber);
                 i = j + 1;
             }
             else if (code[i] < 58 && code[i] > 47) // Number
@@ -110,7 +110,7 @@ namespace Compiler
                 while (j < code_length && code[j] < 58 && code[j] > 47)
                     number += code[j++];
                 i = j;
-                tokens.emplace_back(Token::Type::NUM, number, lineNumber);
+                tokens.emplace_back(Token_Comp::Type::NUM, number, lineNumber);
             }
             else if (code[i] == '/' && i != code_length - 1 && code[i + 1] == '/') // Single Line Comment
             {
@@ -131,7 +131,7 @@ namespace Compiler
             else if (isPreprocessor(code[i])) // Preprocessor
             {
                 std::string pre(1, code[i]);
-                tokens.emplace_back(Token::Type::PRE, pre, lineNumber);
+                tokens.emplace_back(Token_Comp::Type::PRE, pre, lineNumber);
                 varFlag = false;
                 i++;
             }
@@ -148,7 +148,7 @@ namespace Compiler
 						op_buf[j] = '\0';
                         if (IsOperator(op_buf))
                         {
-                            tokens.emplace_back(Token::Type::OP, std::string(op_buf), lineNumber);
+                            tokens.emplace_back(Token_Comp::Type::OP, std::string(op_buf), lineNumber);
                             varFlag = false;
                             found = true;
                             i += j;
@@ -161,7 +161,7 @@ namespace Compiler
                 if (!found)
                 {
                     if (!varFlag)
-                        tokens.emplace_back(Token::Type::VAR, "", lineNumber);
+                        tokens.emplace_back(Token_Comp::Type::VAR, "", lineNumber);
                     varFlag = true;
                     tokens.back().value.push_back(code[i]);
                     i++;
@@ -173,7 +173,7 @@ namespace Compiler
 
     namespace Debug
     {
-        void PrintTokens(const std::vector<Token>& tokens)
+        void PrintTokens(const std::vector<Token_Comp>& tokens)
         {
             std::printf("Printing Tokens List:\n");
             for (int i = 0; i < tokens.size(); i++)
@@ -181,23 +181,23 @@ namespace Compiler
                 char begin, end;
                 switch (tokens[i].type)
                 {
-                case Token::Type::NUM:
+                case Token_Comp::Type::NUM:
                     begin = '(';
                     end = ')';
                     break;
-                case Token::Type::STR:
+                case Token_Comp::Type::STR:
                     begin = '\'';
                     end = '\'';
                     break;
-                case Token::Type::OP:
+                case Token_Comp::Type::OP:
                     begin = '[';
                     end = ']';
                     break;
-                case Token::Type::VAR:
+                case Token_Comp::Type::VAR:
                     begin = '`';
                     end = '`';
                     break;
-                case Token::Type::PRE:
+                case Token_Comp::Type::PRE:
                     begin = '_';
                     end = '_';
                     break;

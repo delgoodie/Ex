@@ -4,9 +4,9 @@
 
 namespace Compiler
 {
-	EvalLink* Flatten(Node* root);
+	EvalLink_Comp* Flatten(Node_Comp* root);
 
 	namespace Debug {
-		void PrintLinkChain(EvalLink* head);
+		void PrintLinkChain(EvalLink_Comp* head);
 	}
 }

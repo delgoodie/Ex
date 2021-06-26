@@ -6,9 +6,9 @@
 
 namespace Compiler
 {
-	Node* Expand(std::vector<Node>& node_flat);
+	Node_Comp* Expand(std::vector<Node_Comp>& node_flat);
 
 	namespace Debug {
-		void PrintNodeTree(Node* root);
+		void PrintNodeTree(Node_Comp* root);
 	}
 }

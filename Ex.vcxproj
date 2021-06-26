@@ -19,57 +19,58 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Evaluator\Evaluator.cpp" />
-    <ClCompile Include="src\Evaluator\Structures\Context.cpp" />
-    <ClCompile Include="src\Evaluator\Operator\Operator.cpp" />
-    <ClCompile Include="src\Evaluator\Loader\Loader.cpp" />
+    <ClCompile Include="src\Executor\Executor.cpp" />
+    <ClCompile Include="src\Executor\Operator\Operator.cpp" />
+    <ClCompile Include="src\Executor\Loader\Loader.cpp" />
     <ClCompile Include="src\Compiler\Compiler.cpp" />
     <ClCompile Include="src\Compiler\Encoder\Encoder.cpp" />
     <ClCompile Include="src\Compiler\Expander\Expander.cpp" />
     <ClCompile Include="src\Compiler\Flattener\Flattener.cpp" />
     <ClCompile Include="src\Compiler\Lexer\Lexer.cpp" />
     <ClCompile Include="src\Compiler\Parser\Parser.cpp" />
-    <ClCompile Include="src\Compiler\Structures\EvalLink.cpp" />
-    <ClCompile Include="src\Compiler\Structures\Expr.cpp" />
-    <ClCompile Include="src\Compiler\Structures\Node.cpp" />
-    <ClCompile Include="src\Evaluator\Evaluator\Evaluator.cpp" />
-    <ClCompile Include="src\Evaluator\Structures\EvalLink.cpp" />
-    <ClCompile Include="src\Evaluator\Structures\Expr.cpp" />
+    <ClCompile Include="src\Compiler\Structures\EvalLink_Comp.cpp" />
+    <ClCompile Include="src\Compiler\Structures\Expr_Comp.cpp" />
+    <ClCompile Include="src\Compiler\Structures\Node_Comp.cpp" />
+    <ClCompile Include="src\Executor\Evaluator\Evaluator.cpp" />
+    <ClCompile Include="src\Executor\Structures\EvalLink.cpp" />
     <ClCompile Include="src\Ex.cpp" />
+    <ClCompile Include="src\Executor\Unloader\Unloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Evaluator\Evaluator.h" />
+    <ClInclude Include="src\Compiler\Structures\Node_Comp.h" />
+    <ClInclude Include="src\Executor\Executor.h" />
     <ClInclude Include="src\Blob.h" />
-    <ClInclude Include="src\Evaluator\EvaluatorCore.h" />
-    <ClInclude Include="src\Evaluator\Structures\Context.h" />
-    <ClInclude Include="src\Evaluator\Structures\Heap.h" />
-    <ClInclude Include="src\Evaluator\Operator\Operator.h" />
-    <ClInclude Include="src\Evaluator\Loader\Loader.h" />
+    <ClInclude Include="src\Executor\ExecutorCore.h" />
+    <ClInclude Include="src\Executor\Structures\Context.h" />
+    <ClInclude Include="src\Executor\Structures\Frame.h" />
+    <ClInclude Include="src\Executor\Structures\Heap.h" />
+    <ClInclude Include="src\Executor\Operator\Operator.h" />
+    <ClInclude Include="src\Executor\Loader\Loader.h" />
     <ClInclude Include="src\Compiler\Compiler.h" />
     <ClInclude Include="src\Compiler\CompilerCore.h" />
     <ClInclude Include="src\Compiler\Encoder\Encoder.h" />
     <ClInclude Include="src\Compiler\Expander\Expander.h" />
     <ClInclude Include="src\Compiler\Flattener\Flattener.h" />
-    <ClInclude Include="src\Compiler\Structures\EvalLink.h" />
-    <ClInclude Include="src\Compiler\Structures\Expr.h" />
+    <ClInclude Include="src\Compiler\Structures\EvalLink_Comp.h" />
+    <ClInclude Include="src\Compiler\Structures\Expr_Comp.h" />
     <ClInclude Include="src\Compiler\Lexer\Lexer.h" />
-    <ClInclude Include="src\Compiler\Structures\Node.h" />
     <ClInclude Include="src\Compiler\Operator\Operator.h" />
     <ClInclude Include="src\Compiler\Parser\Parser.h" />
-    <ClInclude Include="src\Compiler\Structures\Token.h" />
+    <ClInclude Include="src\Compiler\Structures\Token_Comp.h" />
     <ClInclude Include="src\Core.h" />
-    <ClInclude Include="src\Evaluator\Evaluator\Evaluator.h" />
-    <ClInclude Include="src\Evaluator\Structures\EvalLink.h" />
-    <ClInclude Include="src\Evaluator\Structures\Expr.h" />
-    <ClInclude Include="src\Evaluator\Structures\ListLink.h" />
-    <ClInclude Include="src\Evaluator\Structures\Object.h" />
-    <ClInclude Include="src\Evaluator\Structures\StringLink.h" />
-    <ClInclude Include="src\Evaluator\Structures\VarLink.h" />
-    <ClInclude Include="src\Evaluator\Structures\Stack.h" />
+    <ClInclude Include="src\Executor\Evaluator\Evaluator.h" />
+    <ClInclude Include="src\Executor\Structures\EvalLink.h" />
+    <ClInclude Include="src\Executor\Structures\Expr.h" />
+    <ClInclude Include="src\Executor\Structures\ListLink.h" />
+    <ClInclude Include="src\Executor\Structures\Object.h" />
+    <ClInclude Include="src\Executor\Structures\StringLink.h" />
+    <ClInclude Include="src\Executor\Structures\VarLink.h" />
+    <ClInclude Include="src\Executor\Structures\Stack.h" />
+    <ClInclude Include="src\Executor\Unloader\Unloader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -21,13 +21,13 @@
     <ClCompile Include="src\Compiler\Lexer\Lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Compiler\Structures\Node.cpp">
+    <ClCompile Include="src\Compiler\Structures\Node_Comp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Compiler\Structures\EvalLink.cpp">
+    <ClCompile Include="src\Compiler\Structures\EvalLink_Comp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Compiler\Structures\Expr.cpp">
+    <ClCompile Include="src\Compiler\Structures\Expr_Comp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Compiler\Compiler.cpp">
@@ -45,25 +45,22 @@
     <ClCompile Include="src\Compiler\Flattener\Flattener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evaluator\Evaluator\Evaluator.cpp">
+    <ClCompile Include="src\Executor\Evaluator\Evaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evaluator\Loader\Loader.cpp">
+    <ClCompile Include="src\Executor\Loader\Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evaluator\Operator\Operator.cpp">
+    <ClCompile Include="src\Executor\Operator\Operator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evaluator\Structures\EvalLink.cpp">
+    <ClCompile Include="src\Executor\Structures\EvalLink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evaluator\Structures\Expr.cpp">
+    <ClCompile Include="src\Executor\Executor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evaluator\Structures\Context.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Evaluator\Evaluator.cpp">
+    <ClCompile Include="src\Executor\Unloader\Unloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,22 +75,19 @@
     <ClInclude Include="src\Compiler\CompilerCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Compiler\Structures\Token.h">
+    <ClInclude Include="src\Compiler\Structures\Token_Comp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Compiler\Parser\Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Compiler\Structures\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Compiler\Structures\Expr.h">
+    <ClInclude Include="src\Compiler\Structures\Expr_Comp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Compiler\Operator\Operator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Compiler\Structures\EvalLink.h">
+    <ClInclude Include="src\Compiler\Structures\EvalLink_Comp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Compiler\Compiler.h">
@@ -111,49 +105,58 @@
     <ClInclude Include="src\Compiler\Flattener\Flattener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Evaluator\Evaluator.h">
+    <ClInclude Include="src\Executor\Evaluator\Evaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Loader\Loader.h">
+    <ClInclude Include="src\Executor\Loader\Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Operator\Operator.h">
+    <ClInclude Include="src\Executor\Operator\Operator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\EvalLink.h">
+    <ClInclude Include="src\Executor\Structures\EvalLink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\Expr.h">
+    <ClInclude Include="src\Executor\Structures\Expr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\VarLink.h">
+    <ClInclude Include="src\Executor\Structures\VarLink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\ListLink.h">
+    <ClInclude Include="src\Executor\Structures\ListLink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\StringLink.h">
+    <ClInclude Include="src\Executor\Structures\StringLink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\Stack.h">
+    <ClInclude Include="src\Executor\Structures\Stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\Heap.h">
+    <ClInclude Include="src\Executor\Structures\Heap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\Context.h">
+    <ClInclude Include="src\Executor\Structures\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\EvaluatorCore.h">
+    <ClInclude Include="src\Executor\ExecutorCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Blob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Evaluator.h">
+    <ClInclude Include="src\Executor\Executor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evaluator\Structures\Object.h">
+    <ClInclude Include="src\Executor\Structures\Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Compiler\Structures\Node_Comp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Executor\Structures\Frame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Executor\Unloader\Unloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

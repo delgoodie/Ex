@@ -25,12 +25,12 @@ static void PrintSpaces(int num_spaces)
 
 
 namespace Compiler {
-    Node* Expand(std::vector<Node>& node_flat)
+    Node_Comp* Expand(std::vector<Node_Comp>& node_flat)
     {
         if (node_flat.size() == 0)
             std::printf("0 nodes\n");
 		// Iterate over non-ops and set expanded to true
-		for (int i = 0; i < node_flat.size(); i++) if (node_flat[i].type == Node::Type::EXPR) node_flat[i].expanded = true;
+		for (int i = 0; i < node_flat.size(); i++) if (node_flat[i].type == Node_Comp::Type::EXPR) node_flat[i].expanded = true;
 
         // Iterate over ops and expand by prec
         while (node_flat.size() > 1)
@@ -40,7 +40,7 @@ namespace Compiler {
             // find highest prec unexpanded op
 			for (int i = 0; i < node_flat.size(); i++)
 			{
-				bool isOp = node_flat[i].type == Node::Type::OP;
+				bool isOp = node_flat[i].type == Node_Comp::Type::OP;
 				bool isntExpanded = !node_flat[i].expanded;
 				bool lhsGood = !Operator::LHS[node_flat[i].op.index] || i > 0 && node_flat[i - 1].expanded;
 				bool rhsGood = !Operator::RHS[node_flat[i].op.index] || i + 1 < node_flat.size() && node_flat[i + 1].expanded;
@@ -68,13 +68,13 @@ namespace Compiler {
                 // RHS first because index shifts when LHS removed
                 if (Operator::RHS[node_flat[mindex].op.index])
                 {
-                    Node* rhs = new Node(node_flat[mindex + 1]);
+                    Node_Comp* rhs = new Node_Comp(node_flat[mindex + 1]);
                     node_flat.erase(node_flat.begin() + mindex + 1);
                     node_flat[mindex].rhs = rhs;
                 }
                 if (Operator::LHS[node_flat[mindex].op.index])
                 {
-                    Node* lhs = new Node(node_flat[mindex - 1]);
+                    Node_Comp* lhs = new Node_Comp(node_flat[mindex - 1]);
                     node_flat.erase(node_flat.begin() + mindex - 1);
                     mindex--;
                     node_flat[mindex].lhs = lhs;
@@ -83,11 +83,11 @@ namespace Compiler {
             }
         }
 
-        return new Node(node_flat[0]);
+        return new Node_Comp(node_flat[0]);
     }
 
 	namespace Debug {
-		void PrintNodeTree(Node* root)
+		void PrintNodeTree(Node_Comp* root)
 		{
 			std::printf("Printing Node Tree:\n\n");
 			int depth = 0;
@@ -101,7 +101,7 @@ namespace Compiler {
 				no_children = true;
 				for (int i = 1; i <= it; i++)
 				{
-					Node* n = root;
+					Node_Comp* n = root;
 					for (int d = 1; d <= depth; d++)
 					{
 						if (((i - 1) / Pow2(depth - d)) % 2 == 0)

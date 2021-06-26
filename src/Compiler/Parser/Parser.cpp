@@ -48,24 +48,24 @@ namespace Compiler
 
             Temporarily uses lhs & rhs pointers as booleans
         */
-    std::vector<Node> Parse(const std::vector<Token>& tokens)
+    std::vector<Node_Comp> Parse(const std::vector<Token_Comp>& tokens)
         {
-            std::vector<Node> flatNodes;
+            std::vector<Node_Comp> flatNodes;
 
             for (int i = 0; i < tokens.size(); i++)
             {
-				if (tokens[i].type == Token::Type::NUM)
-                    flatNodes.emplace_back(Expr((ex_number_t)std::stod(tokens[i].value)));
-				else if (tokens[i].type == Token::Type::STR)
-                    flatNodes.emplace_back(Expr(tokens[i].value));
-				else if (tokens[i].type == Token::Type::VAR)
-                    flatNodes.emplace_back(Expr(tokens[i].value, nullptr));
-                else if (tokens[i].type == Token::Type::OP)
+				if (tokens[i].type == Token_Comp::Type::NUM)
+                    flatNodes.emplace_back(Expr_Comp((ex_number_t)std::stod(tokens[i].value)));
+				else if (tokens[i].type == Token_Comp::Type::STR)
+                    flatNodes.emplace_back(Expr_Comp(tokens[i].value));
+				else if (tokens[i].type == Token_Comp::Type::VAR)
+                    flatNodes.emplace_back(Expr_Comp(tokens[i].value, nullptr));
+                else if (tokens[i].type == Token_Comp::Type::OP)
                 {
                     // check if lhs and rhs are possible
                     int op_index = -1;
 
-                    bool lhs = i > 0 && (tokens[i - 1].type != Token::Type::OP || !Operator::RHS[flatNodes.back().op.index]);
+                    bool lhs = i > 0 && (tokens[i - 1].type != Token_Comp::Type::OP || !Operator::RHS[flatNodes.back().op.index]);
                     bool canRhs = GetOperatorIndex(tokens[i].value, lhs, true) != -1;
                     bool canNotRhs = GetOperatorIndex(tokens[i].value, lhs, false) != -1;
 
@@ -76,7 +76,7 @@ namespace Compiler
                     else if (canRhs && canNotRhs)
                     {
                         bool rhs = i + 1 < tokens.size() &&
-                            (tokens[i + 1].type == Token::Type::OP ||
+                            (tokens[i + 1].type == Token_Comp::Type::OP ||
                                 (GetOperatorIndex(tokens[i + 1].value, false, true) != -1 ||
                                     GetOperatorIndex(tokens[i + 1].value, false, false) != -1));
                         op_index = GetOperatorIndex(tokens[i].value, lhs, rhs);
@@ -88,7 +88,7 @@ namespace Compiler
 
                     flatNodes.emplace_back(op_index);
                 }
-                else if (tokens[i].type == Token::Type::PRE)
+                else if (tokens[i].type == Token_Comp::Type::PRE)
                 {
                     int bracket_count = 1;
                     std::string bracket_str = tokens[i].value;
@@ -105,7 +105,7 @@ namespace Compiler
                     while (bracket_count != 0)
                     {
                         // Bracket Count Update
-                        if (tokens[j].type == Token::Type::PRE)
+                        if (tokens[j].type == Token_Comp::Type::PRE)
                         {
                             if (tokens[j].value.compare(bracket_str) == 0)
                                 bracket_count++;
@@ -116,15 +116,15 @@ namespace Compiler
                     }
 
                     // i = index of {, j = index after }
-                    std::vector<Token>::const_iterator first = tokens.begin() + i + 1;
-                    std::vector<Token>::const_iterator last = tokens.begin() + j - 1;
-                    std::vector<Token> token_flat(first, last);
+                    std::vector<Token_Comp>::const_iterator first = tokens.begin() + i + 1;
+                    std::vector<Token_Comp>::const_iterator last = tokens.begin() + j - 1;
+                    std::vector<Token_Comp> token_flat(first, last);
 
-					std::vector<Node> node_flat = Parse(token_flat);
-                    Node* node_tree = Expand(node_flat);
-                    EvalLink* object = Flatten(node_tree);
+					std::vector<Node_Comp> node_flat = Parse(token_flat);
+                    Node_Comp* node_tree = Expand(node_flat);
+                    EvalLink_Comp* object = Flatten(node_tree);
 
-                    flatNodes.emplace_back(Expr(object));
+                    flatNodes.emplace_back(Expr_Comp(object));
 
                     // Advance i to j (which will be } but for loop increments i as well)
                     i = j;
@@ -136,7 +136,7 @@ namespace Compiler
 
    namespace Debug
     {
-        void PrintNodeFlat(const std::vector<Node>& node_flat)
+        void PrintNodeFlat(const std::vector<Node_Comp>& node_flat)
         {
             std::printf("Printing Flat Node List:\n");
             for (int i = 0; i < node_flat.size(); i++)

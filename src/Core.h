@@ -7,7 +7,13 @@
 #define EX_VAR_HEAP_SIZE 1000
 #define EX_LIST_HEAP_SIZE 1000
 #define EX_STRING_HEAP_SIZE 1000
-#define EX_OBJECT_STACK_SIZE 1000
+#define EX_FRAME_STACK_SIZE 1000
+
+#ifdef _DEBUG
+#define DEBUG_LOG(x) x
+#else
+#define DEBUG_LOG(x)
+#endif
 
 #include "Blob.h"
 

@@ -7,9 +7,9 @@
 
 namespace Compiler
 {
-	std::vector<Token> Lex(const char* code);
+	std::vector<Token_Comp> Lex(const char* code);
 
 	namespace Debug {
-		void PrintTokens(const std::vector<Token>& tokens);
+		void PrintTokens(const std::vector<Token_Comp>& tokens);
 	}
 }

@@ -9,31 +9,31 @@
 
 namespace Compiler
 {
-	static size_t EvalChainSize(EvalLink* chain)
+	static size_t EvalChainSize(EvalLink_Comp* chain)
 	{
 		size_t size = 0;
-		EvalLink* link = chain;
+		EvalLink_Comp* link = chain;
 		while (link)
 		{
 			size += 1; // Flags
-			if (link->type == EvalLink::Type::OP)
-				size += 1; // op index
+			if (link->type == EvalLink_Comp::Type::OP)
+				size += 2 * sizeof(int); // op index & jump
 			else
 			{
 				size += 1; // Expr Type
 				switch (link->expr.type)
 				{
-				case Expr::Type::EX_BOOLEAN:
-					size += 1;
+				case Expr_Comp::Type::EX_BOOLEAN:
+					size += sizeof(ex_boolean_t);
 					break;
-				case Expr::Type::EX_NUMBER:
+				case Expr_Comp::Type::EX_NUMBER:
 					size += sizeof(ex_number_t);
 					break;
-				case Expr::Type::EX_STRING:
-				case Expr::Type::EX_VARIABLE:
+				case Expr_Comp::Type::EX_STRING:
+				case Expr_Comp::Type::EX_VARIABLE:
 					size += link->expr.string.length() + 1;
 					break;
-				case Expr::Type::EX_OBJECT:
+				case Expr_Comp::Type::EX_OBJECT:
 					size += EvalChainSize(link->expr.object);
 					break;
 				}
@@ -41,7 +41,7 @@ namespace Compiler
 			link = link->next;
 		}
 		// Null link for termination
-		size += 1;
+		size += sizeof(unsigned char);
 		return size;
 	}
 
@@ -51,7 +51,7 @@ namespace Compiler
 		delete blob.data;
 	}
 
-    Blob Encode(EvalLink* head) {
+    Blob Encode(EvalLink_Comp* head) {
         size_t size = EvalChainSize(head);
         // Allocate blob on heap
         unsigned char* data = (unsigned char*)malloc(size);
@@ -60,34 +60,37 @@ namespace Compiler
 
         // Write each link onto heap sequentially
         int index = 0;
-        EvalLink* link = head;
+        EvalLink_Comp* link = head;
         while (link)
         {
             data[index++] = link->Flags(); // * Write Link Flags (1 byte)
 
-            if (link->type == EvalLink::Type::OP)
+            if (link->type == EvalLink_Comp::Type::OP)
             {
-                data[index++] = (unsigned char)link->op_index;
-            }
+				memcpy(&data[index], &link->op.index, sizeof(int));
+				index += sizeof(int);
+				memcpy(&data[index], &link->op.jump, sizeof(int));
+				index += sizeof(int);
+			}
             else
             {
                 data[index++] = (unsigned char)link->expr.type; // * Write Expr Type (1 byte)
 
                 switch (link->expr.type)
                 {
-                case Expr::Type::EX_BOOLEAN:
+                case Expr_Comp::Type::EX_BOOLEAN:
                     data[index++] = (link->expr.boolean ? 0xFF : 0x00); // * Write boolean (1 byte)
                     break;
-                case Expr::Type::EX_NUMBER:
+                case Expr_Comp::Type::EX_NUMBER:
 					memcpy(&data[index], &link->expr.number, sizeof(ex_number_t)); // * Write number (8 bytes if ex_number_type == double)
 					index += sizeof(ex_number_t);
                     break;
-                case Expr::Type::EX_STRING:
-                case Expr::Type::EX_VARIABLE:
+                case Expr_Comp::Type::EX_STRING:
+                case Expr_Comp::Type::EX_VARIABLE:
                     memcpy(&data[index], link->expr.string.c_str(), link->expr.string.length() + 1); // Write char* (n bytes)
                     index += link->expr.string.length() + 1;
                     break;
-                case Expr::Type::EX_OBJECT:
+                case Expr_Comp::Type::EX_OBJECT:
                     Blob obj = Encode(link->expr.object);
 					memcpy(&data[index], &obj.size, sizeof(size_t));
 					index += sizeof(size_t);
