@@ -37,10 +37,17 @@ namespace Executor {
             T* element_ptr = new (&begin[first]) T(element);
             SetFree(first, false);
 
-            while (!IsFree(first))
-                first++;
+            while (!IsFree(first)) first++;
             return element_ptr;
-        } //TODO: test alloc and map bit operations
+        }
+
+        T* Allocate() {
+            T* element_ptr = &begin[first];
+            SetFree(first, false);
+
+            while (!IsFree(first)) first++;
+            return element_ptr;
+        }
 
         void Free(T* element)
         {

@@ -1,6 +1,6 @@
 #pragma once
 
-#define NUM_OPS 31
+#define NUM_OPS 32
 
 #define EX_EXPR_STACK_SIZE 1000
 #define EX_EVAL_HEAP_SIZE 1000

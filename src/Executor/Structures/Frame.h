@@ -1,18 +1,18 @@
 #pragma once
 
+#include "Expr.h"
+#include "Object.h"
 
 namespace Executor {
 	struct EvalLink;
-	struct VarLink;
 	
 	struct Frame {
 		enum class ReturnSide : unsigned char {
 			LHS,
 			RHS
 		};
-		EvalLink* e_head;
-		VarLink* v_head;
-		
+		Object object;
+
 		EvalLink* e_curr;
 		int e_index;
 
@@ -20,5 +20,7 @@ namespace Executor {
 		int rhs_size;
 
 		ReturnSide side;
+
+		Expr parameter;
 	};
 }

@@ -1,6 +1,8 @@
 #include "Evaluator.h"
 
-#include "../Operator/Operator.h"
+#include <string>
+
+#include "../../Operator/Operator.h"
 
 
 // ^ op just adds new stack, and Evaluate only operates on top of stack, but I have a local ptr so I need to maybe point to pointer to top of stack?
@@ -16,7 +18,12 @@ namespace Executor {
             
                 if (context->top_frame->e_curr->TypeFlag()) // Op
                 {
-                    Operator::Result result = Operator::FUNC[context->top_frame->e_curr->op.index](context->top_frame->e_curr->LHSFlag() && context->top_frame->lhs_size-- ? context->ExprStack.BottomPop() : nullptr, context->top_frame->e_curr->RHSFlag() && context->top_frame->rhs_size-- ? context->ExprStack.TopPop() : nullptr, context);
+                    const char* op_str = Operator::STR[context->top_frame->e_curr->op.index];
+                    std::string lhs_str = context->top_frame->e_curr->LHSFlag() ? context->ExprStack.PeekBottom(0)->ToString() : "null";
+                    std::string rhs_str = context->top_frame->e_curr->RHSFlag() ? context->ExprStack.PeekTop(0)->ToString() : "null";
+
+                    std::printf("%s  %s  %s\n", lhs_str.c_str(), op_str, rhs_str.c_str());
+                    Result result = Operator::FUNC[context->top_frame->e_curr->op.index](context->top_frame->e_curr->LHSFlag() && context->top_frame->lhs_size-- ? context->ExprStack.BottomPop() : nullptr, context->top_frame->e_curr->RHSFlag() && context->top_frame->rhs_size-- ? context->ExprStack.TopPop() : nullptr, context);
                 
                     if (result.ErrorFlag()) {
                         // Error handling

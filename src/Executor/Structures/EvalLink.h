@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Expr.h"
+#include <string>
 
 namespace Executor {
 
@@ -41,5 +42,7 @@ namespace Executor {
         bool RHSFlag();
         // 0 = non-null, 1 = null (used for chain termination)
         bool NullFlag();
+
+        std::string ToString() const;
     };
 }

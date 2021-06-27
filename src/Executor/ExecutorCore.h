@@ -15,3 +15,5 @@
 #include "Structures/Frame.h"
 
 #include "Structures/Context.h"
+
+#include "Structures/Result.h"

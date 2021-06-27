@@ -3,31 +3,16 @@
 #include <iostream>
 #include <sstream>
 
+#include "../../Operator/Operator.h"
+
 namespace Executor {
 
 	static StringLink* LoadString(char* string, Context* context) {
-		StringLink* head = nullptr, * curr, * prev = nullptr;
-		int length = (int)strlen(string);
-
-		for (int i = 0; i < length; i += 5) {
-			char strbuf[5];
-			int end = -1;
-			for (int j = 0; j < 5; j++) {
-				if (i + j < length) end = j;
-				if (end == -1) strbuf[j] = string[i + j];
-				else strbuf[j] = '\0';
-			}
-
-			curr = context->StringHeap.Allocate(StringLink(prev, strbuf));
-			if (!head) head = curr;
-			prev->next = curr;
-			prev = curr;
-		}
-
-		return head;
+		std::string stdstr = std::string(string);
+		return Operator::Conversion::StdStringToString(stdstr);
 	}
 
-	static EvalLink* LoadObject(unsigned char* ptr, Context* context) {
+	static Object LoadObject(unsigned char* ptr, Context* context) {
 		EvalLink *head = nullptr, *prev = nullptr, *curr = nullptr;
 		EvalLink link(*(ptr++));
 
@@ -68,8 +53,7 @@ namespace Executor {
 				case Expr::Type::EX_OBJECT:
 					size_t obj_size = *(size_t*)ptr;
 					ptr += sizeof(size_t);
-					link.expr.object.e_head = LoadObject(ptr, context);
-					link.expr.object.v_head = nullptr;
+					link.expr.object = LoadObject(ptr, context);
 					ptr += obj_size;
 					break;
 				}
@@ -85,19 +69,18 @@ namespace Executor {
 
 		curr->next = nullptr;
 
-		return head;
+		return { head, nullptr };
 	}
 
 	Context* Load(Blob blob) {
 		Context* context = new Context();
 
 		Frame frame;
-		frame.e_head = LoadObject(blob.data, context);
-		frame.e_curr = frame.e_head;
+		frame.object = LoadObject(blob.data, context);
+		frame.e_curr = frame.object.e_head;
 		frame.e_index = 0;
 		frame.lhs_size = 0;
 		frame.rhs_size = 0;
-		frame.v_head = nullptr;
 		frame.side = Frame::ReturnSide::LHS;
 
 		context->PushFrame(frame);
@@ -120,30 +103,10 @@ namespace Executor {
 					std::printf("%s  ", el.SideFlag() ? "L" : "R");
 					std::printf("%s  ", el.TypeFlag() ? "OP" : "EXPR");
 					if (el.TypeFlag()) {
-						std::printf("%d  %s %s", el.op.index, el.LHSFlag() ? "L" : "", el.RHSFlag() ? "R" : "");
+						std::printf("%s  %s %s", Operator::STR[el.op.index], el.LHSFlag() ? "L" : "", el.RHSFlag() ? "R" : "");
 					}
 					else {
-						std::printf("T: %d  ", el.expr.type);
-						switch (el.expr.type) {
-						case Expr::Type::EX_NULL:
-							std::printf("NULL");
-							break;
-						case Expr::Type::EX_BOOLEAN:
-							std::printf(el.expr.boolean ? "true" : "false");
-							break;
-						case Expr::Type::EX_NUMBER:
-							std::printf("%g", el.expr.number);
-							break;
-						case Expr::Type::EX_STRING:
-							std::printf("%p %d", el.expr.string.head, (int)el.expr.string.length);
-							break;
-						case Expr::Type::EX_VARIABLE:
-							std::printf("%p %p", el.expr.variable.name_head, el.expr.variable.ptr);
-							break;
-						case Expr::Type::EX_OBJECT:
-							std::printf("%p %p", el.expr.object.e_head, el.expr.object.v_head);
-							break;
-						}
+						std::printf("%s", el.expr.ToString().c_str());
 					}
 					std::printf("    %p\n\n", el.next);
 				}

@@ -54,6 +54,8 @@ namespace Executor {
         Expr(StringLink* s, VarLink* v) : type(Type::EX_VARIABLE), variable({ s, v }) {}
         Expr(Object o) : type(Type::EX_OBJECT), object(o) {}
         Expr(std::nullptr_t null) : type(Type::EX_NULL) {}
+
+        std::string ToString() const;
     };
 
 }

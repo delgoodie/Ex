@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Executor\Executor.cpp" />
-    <ClCompile Include="src\Executor\Operator\Operator.cpp" />
     <ClCompile Include="src\Executor\Loader\Loader.cpp" />
     <ClCompile Include="src\Compiler\Compiler.cpp" />
     <ClCompile Include="src\Compiler\Encoder\Encoder.cpp" />
@@ -34,7 +33,41 @@
     <ClCompile Include="src\Executor\Evaluator\Evaluator.cpp" />
     <ClCompile Include="src\Executor\Structures\EvalLink.cpp" />
     <ClCompile Include="src\Ex.cpp" />
+    <ClCompile Include="src\Executor\Structures\Expr.cpp" />
     <ClCompile Include="src\Executor\Unloader\Unloader.cpp" />
+    <ClCompile Include="src\Operator\Operations\Conversion.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Add_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Add_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_And.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Assign.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Comma_l.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Comma_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Divide.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Else.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_EqualTo.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Eval_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Eval_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Exponent.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_False.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_GreaterThan.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_GreaterThanOrEqualTo.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_If.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Jump.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_LessThan.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_LessThanOrEqualTo.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Modulus.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Multiply.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Not.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_NotEqualTo.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Or.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Return.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_SizeOf.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Subtract_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Subtract_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_While.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -48,7 +81,6 @@
     <ClInclude Include="src\Executor\Structures\Context.h" />
     <ClInclude Include="src\Executor\Structures\Frame.h" />
     <ClInclude Include="src\Executor\Structures\Heap.h" />
-    <ClInclude Include="src\Executor\Operator\Operator.h" />
     <ClInclude Include="src\Executor\Loader\Loader.h" />
     <ClInclude Include="src\Compiler\Compiler.h" />
     <ClInclude Include="src\Compiler\CompilerCore.h" />
@@ -58,7 +90,6 @@
     <ClInclude Include="src\Compiler\Structures\EvalLink_Comp.h" />
     <ClInclude Include="src\Compiler\Structures\Expr_Comp.h" />
     <ClInclude Include="src\Compiler\Lexer\Lexer.h" />
-    <ClInclude Include="src\Compiler\Operator\Operator.h" />
     <ClInclude Include="src\Compiler\Parser\Parser.h" />
     <ClInclude Include="src\Compiler\Structures\Token_Comp.h" />
     <ClInclude Include="src\Core.h" />
@@ -67,10 +98,14 @@
     <ClInclude Include="src\Executor\Structures\Expr.h" />
     <ClInclude Include="src\Executor\Structures\ListLink.h" />
     <ClInclude Include="src\Executor\Structures\Object.h" />
+    <ClInclude Include="src\Executor\Structures\Result.h" />
     <ClInclude Include="src\Executor\Structures\StringLink.h" />
     <ClInclude Include="src\Executor\Structures\VarLink.h" />
     <ClInclude Include="src\Executor\Structures\Stack.h" />
     <ClInclude Include="src\Executor\Unloader\Unloader.h" />
+    <ClInclude Include="src\Operator\Operations\Conversion.h" />
+    <ClInclude Include="src\Operator\Operations\Operations.h" />
+    <ClInclude Include="src\Operator\Operator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -126,8 +126,8 @@ namespace Compiler
 
                     flatNodes.emplace_back(Expr_Comp(object));
 
-                    // Advance i to j (which will be } but for loop increments i as well)
-                    i = j;
+                    // Advance i to j - 1 (which will be } but for loop increments i as well)
+                    i = j - 1;
                 }
             }
 

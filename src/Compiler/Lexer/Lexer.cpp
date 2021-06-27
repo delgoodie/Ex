@@ -88,7 +88,7 @@ namespace Compiler
             else if (code[i] == '\'' || code[i] == '\"') // String
             {
                 varFlag = false;
-                int j = i + 1;
+                int j = i;
                 std::string str = "";
                 while (j++ < code_length && code[j] != code[i])
                 {
