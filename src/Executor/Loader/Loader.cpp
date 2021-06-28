@@ -9,7 +9,7 @@ namespace Executor {
 
 	static StringLink* LoadString(char* string, Context* context) {
 		std::string stdstr = std::string(string);
-		return Operator::Conversion::StdStringToString(stdstr);
+		return Operator::Conversion::StdStringToString(stdstr, context);
 	}
 
 	static Object LoadObject(unsigned char* ptr, Context* context) {

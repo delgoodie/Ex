@@ -8,14 +8,18 @@ namespace Executor {
         unsigned char flags;
         unsigned int error_code;
 
-        Result(Expr e) : expr(e), flags(0x80), error_code(0) {}
-        Result(bool exit_f, bool jump_f) : expr(Expr(nullptr)), flags((exit_f << 6) | (jump_f << 5)), error_code(0) {}
-        Result(Expr e, bool return_f, bool exit_f, bool jump_f) : expr(e), flags((return_f << 7) | (exit_f << 6) | (jump_f << 5)), error_code(0) {}
-        Result(Expr e, unsigned int ec) : expr(e), flags(0x10), error_code(ec) {}
+        const unsigned char RETURN_FLAG = 0x80;
+        const unsigned char EXIT_FLAG = 0x40;
+        const unsigned char NO_ERROR_FLAG = 0x20; // Must be on for no error
 
-        bool ReturnFlag() { return flags & 0x80; }
-        bool ExitFlag() { return flags & 0x40; }
-        bool JumpFlag() { return flags & 0x20; }
-        bool ErrorFlag() { return flags & 0x10; }
+        Result() : expr(Expr(nullptr)), flags(NO_ERROR_FLAG), error_code(0) {}
+        Result(bool exit_f) : expr(Expr(nullptr)), flags(exit_f * EXIT_FLAG | NO_ERROR_FLAG), error_code(0) {}
+        Result(Expr e) : expr(e), flags(RETURN_FLAG | NO_ERROR_FLAG), error_code(0) {}
+        Result(Expr e, bool exit_f) : expr(e), flags((RETURN_FLAG) | exit_f * EXIT_FLAG | NO_ERROR_FLAG), error_code(0) {}
+        Result(unsigned int ec) : expr(Expr(nullptr)), flags(0x00), error_code(ec) {}
+
+        bool ReturnFlag() { return flags & RETURN_FLAG; }
+        bool ExitFlag() { return flags & EXIT_FLAG; }
+        bool ErrorFlag() { return !(flags & NO_ERROR_FLAG); }
     };
 }

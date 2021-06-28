@@ -27,31 +27,22 @@ namespace Executor {
                 
                     if (result.ErrorFlag()) {
                         // Error handling
+                        std::printf("Handle Error");
+                        break;
                     }
                     else if (result.ExitFlag()) {
                         context->ExprStack.BottomPush(result.ReturnFlag() ? result.expr : Expr(nullptr));
                         context->top_frame->lhs_size++;
                         break;
                     }
-                    else if (result.JumpFlag()) {
-                        if (result.ReturnFlag()) {
-                            if (context->top_frame->e_curr->SideFlag()) context->ExprStack.BottomPush(result.expr); // Lhs
-                            else context->ExprStack.TopPush(result.expr); // Rhs
+                    if (result.ReturnFlag()) {
+                        if (context->top_frame->e_curr->SideFlag()) {
+                            context->ExprStack.BottomPush(result.expr); // Lhs
+                            context->top_frame->lhs_size++;
                         }
-                        int jump = context->top_frame->e_curr->op.jump;
-                        for (int i = 0; i < abs(jump); i++) context->top_frame->e_curr = jump > 0 ? context->top_frame->e_curr->next : context->top_frame->e_curr->prev;
-                        continue;
-                    }
-                    else {
-                        if (result.ReturnFlag()) {
-                            if (context->top_frame->e_curr->SideFlag()) {
-                                context->ExprStack.BottomPush(result.expr); // Lhs
-                                context->top_frame->lhs_size++;
-                            }
-                            else {
-                                context->ExprStack.TopPush(result.expr); // Rhs
-                                context->top_frame->rhs_size++;
-                            }
+                        else {
+                            context->ExprStack.TopPush(result.expr); // Rhs
+                            context->top_frame->rhs_size++;
                         }
                     }
                 }

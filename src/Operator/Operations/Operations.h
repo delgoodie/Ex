@@ -2,22 +2,10 @@
 
 #include "../Executor/ExecutorCore.h"
 
+#include "Conversion.h"
+
 namespace Operator
 {
-    namespace Conversion
-    {
-        Executor::Expr StdStringToString(std::string string, Executor::Context* context);
-        Executor::Expr NumberToString(const Executor::Expr& expr, Executor::Context* context);
-        Executor::Expr StringToNumber(const Executor::Expr& expr);
-        Executor::Expr NumberToBool(const Executor::Expr& expr);
-        Executor::Expr BoolToNumber(const Executor::Expr& expr);
-        Executor::Expr StringToBool(const Executor::Expr& expr);
-        Executor::Expr BooleanToString(const Executor::Expr& expr, Executor::Context* context);
-        Executor::Expr ObjectToBoolean(const Executor::Expr& expr);
-        Executor::Expr ObjectToString(const Executor::Expr& expr, Executor::Context* context);
-        Executor::Expr Convert(const Executor::Expr& expr, Executor::Expr::Type type, Executor::Context* context);
-    }
-
     Executor::Result Op_Access_l_r(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
     Executor::Result Op_Access_r(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
     Executor::Result Op_Access(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);

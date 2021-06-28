@@ -9,8 +9,8 @@ namespace Operator {
         // String Concat
         if (lhs.type == Executor::Expr::Type::EX_STRING || rhs.type == Executor::Expr::Type::EX_STRING)
         {
-            Executor::Expr c_lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_STRING);
-            Executor::Expr c_rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_STRING);
+            Executor::Expr c_lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_STRING, context);
+            Executor::Expr c_rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_STRING, context);
 
             std::string sum = c_lhs.string.head->ToString() + c_rhs.string.head->ToString();
 
@@ -37,8 +37,8 @@ namespace Operator {
         }
         else if (lhs.type == Executor::Expr::Type::EX_NUMBER || rhs.type == Executor::Expr::Type::EX_NUMBER) // Numerical Addition
         {
-            Executor::Expr c_lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_NUMBER);
-            Executor::Expr c_rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_NUMBER);
+            Executor::Expr c_lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_NUMBER, context);
+            Executor::Expr c_rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_NUMBER, context);
             return Executor::Result(Executor::Expr(c_lhs.number + c_rhs.number));
         }
         else if (lhs.type == Executor::Expr::Type::EX_BOOLEAN && rhs.type == Executor::Expr::Type::EX_BOOLEAN)

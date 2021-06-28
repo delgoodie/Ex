@@ -38,7 +38,7 @@ namespace Operator
         "->", // return
         ",",  // separate (lhs, rhs)
         ",",   // separate (lhs,)
-        "jump_op"
+        "jmp"
     };
 
     const int PREC[NUM_OPS] = {
@@ -72,8 +72,8 @@ namespace Operator
         14, // =
         15, // ->
         20, // ,
-        20,  // ,
-        -1
+        20, // ,
+        -1  // jump
     };
 
     const bool LHS[NUM_OPS] = {
@@ -107,8 +107,8 @@ namespace Operator
         true,  // =
         false, // ->
         true,  // ,
-        true,   // ,
-        false
+        true,  // ,
+        false  // jump
     };
 
     const bool RHS[NUM_OPS] = {
@@ -142,7 +142,42 @@ namespace Operator
         true,  // =
         true,  // ->
         true,  // ,
-        false,  // ,
-        false
+        false, // ,
+        false  // jump
+    };
+
+    const int POS[NUM_OPS] = {
+        1, // !
+        1, // .
+        1, // .
+        1, // .
+        1, // ^
+        1, // ^
+        1, // #
+        1, // +
+        1, // -
+        1, // !
+        1, // **
+        1, // %
+        1, // *
+        1, // /
+        1, // +
+        1, // -
+        1, // <
+        1, // >
+        1, // <=
+        1, // >=
+        1, // ==
+        1, // !=
+        1, // &&
+        1, // ||
+        0, // ?
+        0, // |
+        0, // ;
+        1, // =
+        1, // ->
+        1, // ,
+        1, // ,
+        1  // jump
     };
 }

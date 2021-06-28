@@ -4,9 +4,9 @@
 
 namespace Operator {
 	Executor::Result Op_If (const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context) {
-		if (Conversion::Convert(lhs, Executor::Expr::Type::EX_BOOLEAN).boolean)
-			return Executor::Result(lhs, true, false, true);
+		if (Conversion::Convert(lhs, Executor::Expr::Type::EX_BOOLEAN, context).boolean)
+			return Executor::Result(lhs);
 		else
-			return Executor::Result(false, true);
+			return Executor::Result();
 	}
 }

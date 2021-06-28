@@ -6,7 +6,7 @@
 #include "Executor/Executor.h"
 
 int main() {
-	const char* input = "  { 3 + 4 } == 5  ";
+	const char* input = " 3 ? 4 ";
 
 	Blob blob = Compiler::Compile(input);
 

@@ -1,11 +1,9 @@
 #include "Conversion.h"
 
-#include "Conversion.h"
-
 namespace Operator {
     namespace Conversion
     {
-        Executor::Expr StdStringToString(std::string string, Executor::Context* context)
+        Executor::StringLink* StdStringToString(std::string string, Executor::Context* context)
         {
             Executor::StringLink* head = nullptr, * curr = context->StringHeap.Allocate(), * prev = nullptr;
             int length = string.length();
@@ -28,22 +26,27 @@ namespace Operator {
 
             return head;
         }
+
         Executor::Expr NumberToString(const Executor::Expr& expr, Executor::Context* context)
         {
             return StdStringToString(std::to_string(expr.number), context);
         }
+        
         Executor::Expr StringToNumber(const Executor::Expr& expr)
         {
             return Executor::Expr(std::stod(expr.string.head->ToString()));
         }
+        
         Executor::Expr NumberToBool(const Executor::Expr& expr)
         {
             return Executor::Expr(expr.number != 0);
         }
+        
         Executor::Expr BoolToNumber(const Executor::Expr& expr)
         {
             return Executor::Expr(expr.boolean ? 1.0 : 0.0);
         }
+        
         Executor::Expr StringToBool(const Executor::Expr& expr)
         {
             std::string string = expr.string.head->ToString();
@@ -57,19 +60,23 @@ namespace Operator {
 
             return Executor::Expr(value);
         }
+        
         Executor::Expr BooleanToString(const Executor::Expr& expr, Executor::Context* context)
         {
             return StdStringToString(expr.boolean ? "true" : "false", context);
         }
+        
         Executor::Expr ObjectToBoolean(const Executor::Expr& expr)
         {
             //TODO: check if empty maybe?
             return Executor::Expr(true);
         }
+        
         Executor::Expr ObjectToString(const Executor::Expr& expr, Executor::Context* context)
         {
             return StdStringToString(expr.ToString(), context);
         }
+        
         Executor::Expr Convert(const Executor::Expr& expr, Executor::Expr::Type type, Executor::Context* context)
         {
             if (expr.type == type)
