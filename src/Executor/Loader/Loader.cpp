@@ -22,12 +22,12 @@ namespace Executor {
 			if (link.NullFlag()); // Null
 			else if (link.TypeFlag()) // Op
 			{
-				link.op.index = *(int*)ptr;
+				link.op.index = *reinterpret_cast<int*>(ptr);
 				ptr += sizeof(int);
-				link.op.jump = *(int*)ptr;
+				link.op.jump = *reinterpret_cast<int*>(ptr);
 				ptr += sizeof(int);
 			}
-			else // Expr
+			else  // Expr
 			{
 				link.expr.type = (Expr::Type)*(ptr++); // Expr Type
 				switch (link.expr.type) {
@@ -37,21 +37,21 @@ namespace Executor {
 					link.expr.boolean = *(ptr++);
 					break;
 				case Expr::Type::EX_NUMBER:
-					link.expr.number = *(double*)ptr;
+					link.expr.number = *reinterpret_cast<double*>(ptr);
 					ptr += sizeof(double);
 					break;
 				case Expr::Type::EX_STRING:
-					link.expr.string.head = LoadString((char *)ptr, context);
-					link.expr.string.length = strlen((char *)ptr);
+					link.expr.string.head = LoadString(reinterpret_cast<char*>(ptr), context);
+					link.expr.string.length = strlen(reinterpret_cast<char*>(ptr));
 					ptr += link.expr.string.length + 1;
 					break;
 				case Expr::Type::EX_VARIABLE:
-					link.expr.variable.name_head = LoadString((char*)ptr, context);
+					link.expr.variable.name_head = LoadString(reinterpret_cast<char*>(ptr), context);
 					link.expr.variable.ptr = nullptr;
-					ptr += strlen((char*)ptr);
+					ptr += strlen(reinterpret_cast<char*>(ptr));
 					break;
 				case Expr::Type::EX_OBJECT:
-					size_t obj_size = *(size_t*)ptr;
+					size_t obj_size = *reinterpret_cast<size_t*>(ptr);
 					ptr += sizeof(size_t);
 					link.expr.object = LoadObject(ptr, context);
 					ptr += obj_size;

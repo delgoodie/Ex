@@ -15,14 +15,13 @@ namespace Executor {
             Frame::ReturnSide returnSide = context->top_frame->side;
 
             while (context->top_frame->e_curr) {
-            
                 if (context->top_frame->e_curr->TypeFlag()) // Op
                 {
                     const char* op_str = Operator::STR[context->top_frame->e_curr->op.index];
-                    std::string lhs_str = context->top_frame->e_curr->LHSFlag() ? context->ExprStack.PeekBottom(0)->ToString() : "null";
-                    std::string rhs_str = context->top_frame->e_curr->RHSFlag() ? context->ExprStack.PeekTop(0)->ToString() : "null";
+                    std::string lhs_str = context->top_frame->e_curr->LHSFlag() ? "<- L " + context->ExprStack.PeekBottom(0)->ToString() : "";
+                    std::string rhs_str = context->top_frame->e_curr->RHSFlag() ? "<- R " + context->ExprStack.PeekTop(0)->ToString() : "";
 
-                    std::printf("%s  %s  %s\n", lhs_str.c_str(), op_str, rhs_str.c_str());
+                    std::printf("%s  %s  %s\n", op_str, lhs_str.c_str() , rhs_str.c_str());
                     Result result = Operator::FUNC[context->top_frame->e_curr->op.index](context->top_frame->e_curr->LHSFlag() && context->top_frame->lhs_size-- ? context->ExprStack.BottomPop() : nullptr, context->top_frame->e_curr->RHSFlag() && context->top_frame->rhs_size-- ? context->ExprStack.TopPop() : nullptr, context);
                 
                     if (result.ErrorFlag()) {
@@ -30,13 +29,16 @@ namespace Executor {
                         std::printf("Handle Error");
                         break;
                     }
-                    else if (result.ExitFlag()) {
-                        context->ExprStack.BottomPush(result.ReturnFlag() ? result.expr : Expr(nullptr));
-                        context->top_frame->lhs_size++;
+                    
+					if (result.ExitFlag()) {
+						context->ExprStack.BottomPush(result.ReturnFlag() ? result.expr : Expr(nullptr));
+						context->top_frame->lhs_size++;
                         break;
                     }
-                    if (result.ReturnFlag()) {
-                        if (context->top_frame->e_curr->SideFlag()) {
+                    
+					if (result.ReturnFlag()) {
+						std::printf("%s  ->  %s\n", result.expr.ToString().c_str(), context->top_frame->e_curr->SideFlag() ? "L" : "R");
+						if (context->top_frame->e_curr->SideFlag()) {
                             context->ExprStack.BottomPush(result.expr); // Lhs
                             context->top_frame->lhs_size++;
                         }
@@ -45,10 +47,17 @@ namespace Executor {
                             context->top_frame->rhs_size++;
                         }
                     }
+					
+					if (result.JumpFlag()) {
+						int jump = context->top_frame->e_curr->op.jump;
+						for (int i = 0; i < abs(jump); i++) context->top_frame->e_curr = jump > 0 ? context->top_frame->e_curr->next : context->top_frame->e_curr->prev;
+						continue;
+					}
                 }
                 else // Expr
                 {
-                    if (context->top_frame->e_curr->SideFlag()) {
+					std::printf("%s  ->  %s\n", context->top_frame->e_curr->expr.ToString().c_str(), context->top_frame->e_curr->SideFlag() ? "L" : "R");
+					if (context->top_frame->e_curr->SideFlag()) {
                         context->ExprStack.BottomPush(context->top_frame->e_curr->expr);
                         context->top_frame->lhs_size++;
                     }

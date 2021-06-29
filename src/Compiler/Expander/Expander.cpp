@@ -69,13 +69,15 @@ namespace Compiler {
                 if (Operator::RHS[node_flat[mindex].op.index])
                 {
                     Node_Comp* rhs = new Node_Comp(node_flat[mindex + 1]);
+					rhs->side = Node_Comp::Side::RHS;
                     node_flat.erase(node_flat.begin() + mindex + 1);
                     node_flat[mindex].rhs = rhs;
                 }
                 if (Operator::LHS[node_flat[mindex].op.index])
                 {
                     Node_Comp* lhs = new Node_Comp(node_flat[mindex - 1]);
-                    node_flat.erase(node_flat.begin() + mindex - 1);
+					lhs->side = Node_Comp::Side::LHS;
+					node_flat.erase(node_flat.begin() + mindex - 1);
                     mindex--;
                     node_flat[mindex].lhs = lhs;
                 }
@@ -83,6 +85,7 @@ namespace Compiler {
             }
         }
 
+		node_flat[0].side = Node_Comp::Side::LHS;
         return new Node_Comp(node_flat[0]);
     }
 

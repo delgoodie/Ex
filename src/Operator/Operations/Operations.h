@@ -16,7 +16,8 @@ namespace Operator
     Executor::Result Op_Else(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
     Executor::Result Op_Return(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
     Executor::Result Op_Comma_l_r(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
-    Executor::Result Op_Comma_l(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
+	Executor::Result Op_Comma_l(const Executor::Expr& lhs, const Executor::Expr& rhs, Executor::Context* context);
+	Executor::Result Op_Jump(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
 
     Executor::Result Op_False(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
     Executor::Result Op_Eval_r(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
@@ -42,7 +43,7 @@ namespace Operator
     Executor::Result Op_NotEqualTo(const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context);
 
     Executor::Result(* const FUNC[NUM_OPS])(const Executor::Expr&, const Executor::Expr&,  Executor::Context*) = {
-        Op_False,                   // !
+        Op_False,                   // !   
         Op_Access_l_r,              // .
         Op_Access_r,                // .
         Op_Access,                  // .
@@ -72,6 +73,7 @@ namespace Operator
         Op_Assign,                  // =
         Op_Return,                  // ->
         Op_Comma_l_r,               // ,
-        Op_Comma_l                  // ,
+		Op_Comma_l,                 // ,
+		Op_Jump						// jmp
     };
 }

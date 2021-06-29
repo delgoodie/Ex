@@ -32,8 +32,8 @@ namespace Operator
         "&&", // and
         "||", // or
         "?",  // if
-        ";",  // while
         "|",  // else
+        ";",  // while
         "=",  // assign
         "->", // return
         ",",  // separate (lhs, rhs)
@@ -42,7 +42,7 @@ namespace Operator
     };
 
     const int PREC[NUM_OPS] = {
-        1,  // !
+        1,  // !      
         2,  // .
         2,  // .
         2,  // .

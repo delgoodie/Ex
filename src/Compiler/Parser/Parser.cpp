@@ -62,6 +62,7 @@ namespace Compiler
                     flatNodes.emplace_back(Expr_Comp(tokens[i].value, nullptr));
                 else if (tokens[i].type == Token_Comp::Type::OP)
                 {
+					std::string symbol = tokens[i].value;
                     // check if lhs and rhs are possible
                     int op_index = -1;
 
@@ -76,7 +77,7 @@ namespace Compiler
                     else if (canRhs && canNotRhs)
                     {
                         bool rhs = i + 1 < tokens.size() &&
-                            (tokens[i + 1].type == Token_Comp::Type::OP ||
+                            (tokens[i + 1].type != Token_Comp::Type::OP ||
                                 (GetOperatorIndex(tokens[i + 1].value, false, true) != -1 ||
                                     GetOperatorIndex(tokens[i + 1].value, false, false) != -1));
                         op_index = GetOperatorIndex(tokens[i].value, lhs, rhs);
