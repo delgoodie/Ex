@@ -12,9 +12,9 @@ namespace Executor {
 	{
 		while (context->top_frame)
 		{
-			Frame::ReturnSide returnSide = context->top_frame->side;
-
 			while (context->top_frame->e_curr) {
+				bool frame_switch = false;
+
 				if (context->top_frame->e_curr->TypeFlag()) // Op
 				{
 					Expr* lhs_expr = nullptr;
@@ -47,13 +47,18 @@ namespace Executor {
 					}
 
 					if (result.ExitFlag()) {
+#ifdef _DEBUG
+						std::printf("%s  ->  L\n", result.expr.ToString().c_str());
+#endif
 						context->ExprStack.BottomPush(result.ReturnFlag() ? result.expr : Expr(nullptr));
 						context->top_frame->lhs_size++;
 						break;
 					}
 
 					if (result.ReturnFlag()) {
+#ifdef _DEBUG
 						std::printf("%s  ->  %s\n", result.expr.ToString().c_str(), context->top_frame->e_curr->SideFlag() ? "L" : "R");
+#endif
 						if (context->top_frame->e_curr->SideFlag()) {
 							context->ExprStack.BottomPush(result.expr); // Lhs
 							context->top_frame->lhs_size++;
@@ -69,6 +74,10 @@ namespace Executor {
 						for (int i = 0; i < abs(jump); i++) context->top_frame->e_curr = jump > 0 ? context->top_frame->e_curr->next : context->top_frame->e_curr->prev;
 						continue;
 					}
+
+					if (result.FrameSwitchFlag()) {
+						frame_switch = true;
+					}
 				}
 				else // Expr
 				{
@@ -83,14 +92,33 @@ namespace Executor {
 					}
 				}
 
-				context->top_frame->e_curr = context->top_frame->e_curr->next;
+				if (!frame_switch)
+					context->top_frame->e_curr = context->top_frame->e_curr->next;
 			}
+
 
 			Expr returnExpr = context->ExprStack.BottomPop();
 			context->top_frame->lhs_size--;
+			if (returnExpr.type == Expr::Type::EX_VARIABLE && !returnExpr.variable.ptr) returnExpr.variable.ptr = Operator::Conversion::FindVariable(returnExpr, context);
 
-			while (context->top_frame->lhs_size-- > 0) context->ExprStack.BottomPop();
-			while (context->top_frame->rhs_size-- > 0) context->ExprStack.TopPop();
+#ifdef _DEBUG
+			std::printf("(return)  <-  L %s\n", returnExpr.ToString().c_str());
+#endif
+
+			while (context->top_frame->lhs_size-- > 0) {
+				Expr l_removed_expr = context->ExprStack.BottomPop();
+#ifdef _DEBUG
+				std::printf("(discard)  <-  L %s\n", l_removed_expr.ToString().c_str());
+#endif
+			}
+			while (context->top_frame->rhs_size-- > 0) {
+				Expr r_removed_expr = context->ExprStack.TopPop();
+#ifdef _DEBUG
+				std::printf("(discard)  <-  R %s\n", r_removed_expr.ToString().c_str());
+#endif
+			}
+
+			Frame::ReturnSide returnSide = context->top_frame->side;
 
 			context->PopFrame();
 
@@ -98,10 +126,16 @@ namespace Executor {
 				if (returnSide == Frame::ReturnSide::LHS) {
 					context->ExprStack.BottomPush(returnExpr);
 					context->top_frame->lhs_size++;
+#ifdef _DEBUG
+					std::printf("%s  ->  L\n", returnExpr.ToString().c_str());
+#endif
 				}
 				else {
 					context->ExprStack.TopPush(returnExpr);
 					context->top_frame->rhs_size++;
+#ifdef _DEBUG
+					std::printf("%s  ->  R\n", returnExpr.ToString().c_str());
+#endif
 				}
 			}
 			else {

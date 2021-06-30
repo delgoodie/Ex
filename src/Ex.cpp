@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 					code_buffer = new char[code_char_vec.size() + 1];
 					for (int i = 0; i < code_char_vec.size(); i++) code_buffer[i] = code_char_vec[i];
 					code_buffer[code_char_vec.size()] = '\0';
-					std::printf("File: \"%s\"\n", code_buffer);
+					std::printf("\"\"\"\n%s\n\"\"\"\n", code_buffer);
 				}
 				else {
 					std::printf("Vector file read failed\n");

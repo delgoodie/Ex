@@ -40,7 +40,8 @@ namespace Operator {
 
 		Executor::Expr NumberToString(Executor::Expr expr, Executor::Context* context)
 		{
-			return StdStringToString(std::to_string(expr.number), context);
+			Executor::StringLink* sl = StdStringToString(std::to_string(expr.number), context);
+			return Executor::Expr(sl, StringLength(sl));
 		}
 
 		Executor::Expr StringToNumber(Executor::Expr expr)
@@ -74,7 +75,8 @@ namespace Operator {
 
 		Executor::Expr BooleanToString(Executor::Expr expr, Executor::Context* context)
 		{
-			return StdStringToString(expr.boolean ? "true" : "false", context);
+			Executor::StringLink* sl = StdStringToString(expr.boolean ? "true" : "false", context);
+			return Executor::Expr(sl, StringLength(sl));
 		}
 
 		Executor::Expr ObjectToBoolean(Executor::Expr expr)
@@ -85,7 +87,8 @@ namespace Operator {
 
 		Executor::Expr ObjectToString(Executor::Expr expr, Executor::Context* context)
 		{
-			return StdStringToString(expr.ToString(), context);
+			Executor::StringLink* sl = StdStringToString(expr.ToString(), context);
+			return Executor::Expr(sl, StringLength(sl));
 		}
 
 		Executor::VarLink* FindVariable(Executor::Expr expr, Executor::Context* context) {

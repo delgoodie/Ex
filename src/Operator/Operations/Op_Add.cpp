@@ -40,8 +40,7 @@ namespace Operator {
 		// String Concat
 		if (lhs->type == Executor::Expr::Type::EX_STRING || rhs->type == Executor::Expr::Type::EX_STRING)
 		{
-			*lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_STRING, context);
-			*rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_STRING, context);
+			CAST_PARAMS(Executor::Expr::Type::EX_STRING);
 
 			std::string sum = lhs->string.head->ToString() + rhs->string.head->ToString();
 
