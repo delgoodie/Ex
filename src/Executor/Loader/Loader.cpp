@@ -48,7 +48,7 @@ namespace Executor {
 					break;
 				case Expr::Type::EX_VARIABLE:
 					link.expr.variable.name_head = LoadString(reinterpret_cast<char*>(ptr), context);
-					link.expr.variable.ptr = nullptr;
+					link.expr.variable.link = nullptr;
 					ptr += strlen(reinterpret_cast<char*>(ptr)) + 1;
 					break;
 				case Expr::Type::EX_OBJECT:
@@ -84,7 +84,7 @@ namespace Executor {
 		vl->expr = Expr(LoadObject(blob.data, context));
 
 		frame.dot = Expr(nullptr, vl);
-		frame.e_curr = frame.dot.variable.ptr->expr.object.e_head;
+		frame.e_curr = frame.dot.variable.link->expr.object.e_head;
 		frame.e_index = 0;
 		frame.lhs_size = 0;
 		frame.rhs_size = 0;

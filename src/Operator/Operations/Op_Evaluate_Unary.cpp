@@ -14,11 +14,12 @@ namespace Operator {
 			dot->expr = *rhs;
 		}
 		else {
-			dot = Conversion::FindVariable(*rhs, context);
+			if (rhs->variable.link) dot = rhs->variable.link;
+			else dot = Conversion::FindVariable(*rhs, context->top_frame->dot.variable.link->expr.object.v_head, context);
 		}
 
 		frame.dot = Executor::Expr(nullptr, dot);
-		frame.e_curr = frame.dot.variable.ptr->expr.object.e_head;
+		frame.e_curr = frame.dot.variable.link->expr.object.e_head;
 		frame.lhs_size = 0;
 		frame.rhs_size = 0;
 		frame.side = context->top_frame->e_curr->SideFlag() ? Executor::Frame::ReturnSide::LHS : Executor::Frame::ReturnSide::RHS;

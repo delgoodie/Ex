@@ -60,25 +60,10 @@
     <ClCompile Include="src\Executor\Unloader\Unloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Access.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Access_l_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Access_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_And.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_Assign.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Comma_l.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Comma_l_r.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_Divide.cpp">
@@ -88,12 +73,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_EqualTo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Eval_l_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Eval_r.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_Exponent.cpp">
@@ -138,12 +117,6 @@
     <ClCompile Include="src\Operator\Operations\Op_SizeOf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Subtract_l_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Subtract_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_Catch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -157,6 +130,39 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_Add.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Parameter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Access_Unary_R.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Access_Unary_L.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Access_Nullary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Access_Binary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Evaluate_Binary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Evaluate_Unary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Comma_Binary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Comma_Unary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Subtract_Binary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Subtract_Unary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

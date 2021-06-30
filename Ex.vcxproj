@@ -36,19 +36,20 @@
     <ClCompile Include="src\Executor\Structures\Expr.cpp" />
     <ClCompile Include="src\Executor\Unloader\Unloader.cpp" />
     <ClCompile Include="src\Operator\Operations\Conversion.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Access.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Access_l_r.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Access_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access_Binary.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access_Nullary.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access_Unary_L.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Access_Unary_R.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Add.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_And.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Assign.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Comma_l.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Comma_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Comma_Binary.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Comma_Unary.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Divide.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Else.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_EqualTo.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Eval_l_r.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Eval_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Evaluate_Binary.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Evaluate_Unary.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Exponent.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_False.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_GreaterThan.cpp" />
@@ -62,10 +63,11 @@
     <ClCompile Include="src\Operator\Operations\Op_Not.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_NotEqualTo.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Or.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Parameter.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Return.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_SizeOf.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Subtract_l_r.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Subtract_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Subtract_Binary.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Subtract_Unary.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Catch.cpp" />
   </ItemGroup>
   <ItemGroup>

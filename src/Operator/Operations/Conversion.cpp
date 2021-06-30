@@ -91,22 +91,25 @@ namespace Operator {
 			return Executor::Expr(sl, StringLength(sl));
 		}
 
-		Executor::VarLink* FindVariable(Executor::Expr expr, Executor::Context* context) {
-			if (expr.variable.ptr) return expr.variable.ptr;
-			else {
-				Executor::VarLink* vl = context->top_frame->dot.variable.ptr->expr.object.v_head;
-				Executor::Expr v_name(expr.variable.name_head, StringLength(expr.variable.name_head)), vl_name(vl->name, StringLength(vl->name));
+		Executor::VarLink* FindVariable(Executor::Expr expr, Executor::VarLink* v_head, Executor::Context* context) {
+			if (expr.type == Executor::Expr::Type::EX_VARIABLE) expr = Executor::Expr(expr.variable.name_head, StringLength(expr.variable.name_head));
 
-				while (vl && !Op_EqualTo(&v_name, &vl_name, context).expr.boolean) {
+			if (expr.type == Executor::Expr::Type::EX_STRING) {
+				Executor::VarLink* vl = v_head;
+				Executor::Expr vl_name(vl->name, StringLength(vl->name));
+
+				while (vl && !Op_EqualTo(&expr, &vl_name, context).expr.boolean) {
 					vl = vl->next;
-					v_name = Executor::Expr(vl->name, StringLength(vl->name));
+					vl_name = Executor::Expr(vl->name, StringLength(vl->name));
 				}
 				return vl;
 			}
+			else throw "Can't find variable from expr";
 		}
 
 		Executor::Expr ConvertVariable(Executor::Expr expr, Executor::Context* context) {
-			return FindVariable(expr, context)->expr;
+			if (expr.type == Executor::Expr::Type::EX_VARIABLE && expr.variable.link) return expr.variable.link->expr;
+			else return FindVariable(expr, context->top_frame->dot.variable.link->expr.object.v_head, context)->expr;
 		}
 
 		Executor::Expr Convert(Executor::Expr expr, Executor::Expr::Type type, Executor::Context* context)

@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include "../Executor/ExecutorCore.h"
 
@@ -12,30 +13,34 @@ if (rhs->type == Executor::Expr::Type::EX_VARIABLE) *rhs = Conversion::ConvertVa
 
 namespace Operator
 {
-	Executor::Result Op_Access_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Access_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Access(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Access_Binary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Access_Unary_L(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Access_Unary_R(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Access_Nullary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Assign(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
 	Executor::Result Op_If(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Else(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Return(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Comma_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Comma_l(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Comma_Binary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Comma_Unary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Jump(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Catch(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
-	Executor::Result Op_False(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Parameter(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Eval_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Eval_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+
+	Executor::Result Op_False(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_SizeOf(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Add(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+
 	Executor::Result Op_Exponent(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Modulus(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Multiply(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Divide(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Subtract_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Add(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Subtract_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Subtract_Unary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Subtract_Binary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
 	Executor::Result Op_LessThan(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_GreaterThan(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
@@ -48,21 +53,23 @@ namespace Operator
 	Executor::Result Op_NotEqualTo(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
 	Executor::Result(*const FUNC[NUM_OPS])(Executor::Expr*, Executor::Expr*, Executor::Context*) = {
+		Op_Parameter,				// $
 		Op_False,                   // !   
-		Op_Access_l_r,              // .
-		Op_Access_r,                // .
-		Op_Access,                  // .
+		Op_Access_Binary,           // .
+		Op_Access_Unary_L,          // .
+		Op_Access_Unary_R,          // .
+		Op_Access_Nullary,          // .
 		Op_Eval_l_r,                // ^
 		Op_Eval_r,                  // ^
 		Op_SizeOf,                  // #
-		Op_Subtract_r,              // -
+		Op_Subtract_Unary,          // -
 		Op_Not,                     // !
 		Op_Exponent,                // **
 		Op_Modulus,                 // %
 		Op_Multiply,                // *
 		Op_Divide,                  // /
 		Op_Add,						// +
-		Op_Subtract_l_r,            // -
+		Op_Subtract_Binary,         // -
 		Op_LessThan,                // <
 		Op_GreaterThan,             // >
 		Op_LessThanOrEqualTo,       // <=
@@ -75,8 +82,8 @@ namespace Operator
 		Op_Else,                    // |
 		Op_Assign,                  // =
 		Op_Return,                  // ->
-		Op_Comma_l_r,               // ,
-		Op_Comma_l,                 // ,
+		Op_Comma_Binary,            // ,
+		Op_Comma_Unary,             // ,
 		Op_Jump,					// ;
 		Op_Catch					// :
 	};

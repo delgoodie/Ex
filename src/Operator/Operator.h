@@ -7,9 +7,11 @@
 namespace Operator
 {
 	const char STR[NUM_OPS][4] = {
+		"$",  // param
 		"!",  // false
-		".",  // access (lhs.rhs)   - "access"
-		".",  // access (.rhs)      - "relative"
+		".",  // access (lhs.rhs)   - property/index of object/list
+		".",  // access (lhs.)      - parent index
+		".",  // access (.rhs)      - explicit local
 		".",  // access (.)         - "this"
 		"^",  // eval with parameter
 		"^",  // eval
@@ -41,7 +43,9 @@ namespace Operator
 	};
 
 	const int PREC[NUM_OPS] = {
+		1,  // $      
 		1,  // !      
+		2,  // .
 		2,  // .
 		2,  // .
 		2,  // .
@@ -75,7 +79,9 @@ namespace Operator
 	};
 
 	const bool LHS[NUM_OPS] = {
+		false, // $
 		false, // !
+		true,  // .
 		true,  // .
 		false, // .
 		false, // .
@@ -109,8 +115,10 @@ namespace Operator
 	};
 
 	const bool RHS[NUM_OPS] = {
+		false, // $
 		false, // !
 		true,  // .
+		false,  // .
 		true,  // .
 		false, // .
 		true,  // ^
@@ -143,7 +151,9 @@ namespace Operator
 	};
 
 	const int POS[NUM_OPS] = {
+		1, // $
 		1, // !
+		1, // .
 		1, // .
 		1, // .
 		1, // .

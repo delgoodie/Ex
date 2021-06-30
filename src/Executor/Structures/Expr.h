@@ -37,7 +37,7 @@ namespace Executor {
 			struct
 			{
 				StringLink* name_head;
-				VarLink* ptr;
+				VarLink* link;
 			} variable;
 			struct
 			{
