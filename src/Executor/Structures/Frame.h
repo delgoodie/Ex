@@ -5,13 +5,13 @@
 
 namespace Executor {
 	struct EvalLink;
-	
+
 	struct Frame {
 		enum class ReturnSide : unsigned char {
 			LHS,
 			RHS
 		};
-		Object object;
+		Expr dot;
 
 		EvalLink* e_curr;
 		int e_index;

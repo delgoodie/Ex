@@ -1,11 +1,10 @@
+#include "Operations.h"
+
 #include "../Executor/ExecutorCore.h"
 
-#include "Conversion.h"
-
 namespace Operator {
-	Executor::Result Op_Modulus (const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context) {
-		Executor::Expr c_lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_NUMBER, context);
-		Executor::Expr c_rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_NUMBER, context);
-		return Executor::Result(Executor::Expr((ex_number_t)((int)c_lhs.number % (int)c_rhs.number)));
+	Executor::Result Op_Modulus(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context) {
+		CAST_PARAMS(Executor::Expr::Type::EX_NUMBER);
+		return Executor::Result(Executor::Expr((ex_number_t)(static_cast<int>(lhs->number) % static_cast<int>(rhs->number))));
 	}
 }

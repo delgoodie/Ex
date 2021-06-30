@@ -40,7 +40,6 @@
     <ClCompile Include="src\Operator\Operations\Op_Access_l_r.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Access_r.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Add_l_r.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Add_r.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_And.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Assign.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Comma_l.cpp" />
@@ -67,7 +66,7 @@
     <ClCompile Include="src\Operator\Operations\Op_SizeOf.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Subtract_l_r.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Subtract_r.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_While.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Catch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

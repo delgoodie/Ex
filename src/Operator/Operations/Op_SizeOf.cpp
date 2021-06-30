@@ -1,18 +1,20 @@
+#include "Operations.h"
+
 #include "../Executor/ExecutorCore.h"
 
 namespace Operator {
-	Executor::Result Op_SizeOf (const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context) {
+	Executor::Result Op_SizeOf(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context) {
 		double size = 0;
-		if (rhs.type == Executor::Expr::Type::EX_NULL)
+		if (rhs->type == Executor::Expr::Type::EX_NULL)
 			size = 0;
-		else if (rhs.type == Executor::Expr::Type::EX_BOOLEAN)
+		else if (rhs->type == Executor::Expr::Type::EX_BOOLEAN)
 			size = 0;
-		else if (rhs.type == Executor::Expr::Type::EX_STRING)
-			size = rhs.string.length;
-		else if (rhs.type == Executor::Expr::Type::EX_VARIABLE)
+		else if (rhs->type == Executor::Expr::Type::EX_STRING)
+			size = rhs->string.length;
+		else if (rhs->type == Executor::Expr::Type::EX_VARIABLE)
 			size = 0;
-		else if (rhs.type == Executor::Expr::Type::EX_OBJECT) {
-			Executor::EvalLink* el = rhs.object.e_head;
+		else if (rhs->type == Executor::Expr::Type::EX_OBJECT) {
+			Executor::EvalLink* el = rhs->object.e_head;
 			while (el && ++size) el = el->next;
 		}
 

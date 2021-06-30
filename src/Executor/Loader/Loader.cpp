@@ -9,11 +9,12 @@ namespace Executor {
 
 	static StringLink* LoadString(char* string, Context* context) {
 		std::string stdstr = std::string(string);
+		std::printf("found string: %s\n", string);
 		return Operator::Conversion::StdStringToString(stdstr, context);
 	}
 
 	static Object LoadObject(unsigned char* ptr, Context* context) {
-		EvalLink *head = nullptr, *prev = nullptr, *curr = nullptr;
+		EvalLink* head = nullptr, * prev = nullptr, * curr = nullptr;
 		EvalLink link(*(ptr++));
 
 		while (!link.NullFlag()) {
@@ -29,7 +30,7 @@ namespace Executor {
 			}
 			else  // Expr
 			{
-				link.expr.type = (Expr::Type)*(ptr++); // Expr Type
+				link.expr.type = (Expr::Type) * (ptr++); // Expr Type
 				switch (link.expr.type) {
 				case Expr::Type::EX_NULL:
 					break;
@@ -46,8 +47,10 @@ namespace Executor {
 					ptr += link.expr.string.length + 1;
 					break;
 				case Expr::Type::EX_VARIABLE:
+					std::printf("found variable!\n");
 					link.expr.variable.name_head = LoadString(reinterpret_cast<char*>(ptr), context);
 					link.expr.variable.ptr = nullptr;
+					std::printf("variable name: %s\n", link.expr.variable.name_head->ToString().c_str());
 					ptr += strlen(reinterpret_cast<char*>(ptr));
 					break;
 				case Expr::Type::EX_OBJECT:
@@ -58,7 +61,7 @@ namespace Executor {
 					break;
 				}
 			}
-			
+
 			curr = context->EvalHeap.Allocate(link);
 			if (!prev) head = curr;
 			else prev->next = curr;
@@ -76,15 +79,21 @@ namespace Executor {
 		Context* context = new Context();
 
 		Frame frame;
-		frame.object = LoadObject(blob.data, context);
-		frame.e_curr = frame.object.e_head;
+
+		VarLink* vl = context->VarHeap.Allocate();
+		vl->prev = nullptr;
+		vl->next = nullptr;
+		vl->expr = Expr(LoadObject(blob.data, context));
+
+		frame.dot = Expr(nullptr, vl);
+		frame.e_curr = frame.dot.variable.ptr->expr.object.e_head;
 		frame.e_index = 0;
 		frame.lhs_size = 0;
 		frame.rhs_size = 0;
 		frame.side = Frame::ReturnSide::LHS;
 
 		context->PushFrame(frame);
-		
+
 		return context;
 	}
 

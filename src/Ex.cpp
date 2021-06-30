@@ -49,7 +49,6 @@ int main(int argc, char* argv[]) {
 
 		Executor::Execute(blob);
 
-
 		return 0;
 	}
 	else {

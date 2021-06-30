@@ -8,90 +8,106 @@
 // ^ op just adds new stack, and Evaluate only operates on top of stack, but I have a local ptr so I need to maybe point to pointer to top of stack?
 
 namespace Executor {
-    Expr Evaluate(Context* context)
-    {
-        while(context->top_frame)
-        {
-            Frame::ReturnSide returnSide = context->top_frame->side;
+	Expr Evaluate(Context* context)
+	{
+		while (context->top_frame)
+		{
+			Frame::ReturnSide returnSide = context->top_frame->side;
 
-            while (context->top_frame->e_curr) {
-                if (context->top_frame->e_curr->TypeFlag()) // Op
-                {
-                    const char* op_str = Operator::STR[context->top_frame->e_curr->op.index];
-                    std::string lhs_str = context->top_frame->e_curr->LHSFlag() ? "<- L " + context->ExprStack.PeekBottom(0)->ToString() : "";
-                    std::string rhs_str = context->top_frame->e_curr->RHSFlag() ? "<- R " + context->ExprStack.PeekTop(0)->ToString() : "";
+			while (context->top_frame->e_curr) {
+				if (context->top_frame->e_curr->TypeFlag()) // Op
+				{
+					Expr* lhs_expr = nullptr;
+					Expr* rhs_expr = nullptr;
 
-                    std::printf("%s  %s  %s\n", op_str, lhs_str.c_str() , rhs_str.c_str());
-                    Result result = Operator::FUNC[context->top_frame->e_curr->op.index](context->top_frame->e_curr->LHSFlag() && context->top_frame->lhs_size-- ? context->ExprStack.BottomPop() : nullptr, context->top_frame->e_curr->RHSFlag() && context->top_frame->rhs_size-- ? context->ExprStack.TopPop() : nullptr, context);
-                
-                    if (result.ErrorFlag()) {
-                        // Error handling
-                        std::printf("Handle Error");
-                        break;
-                    }
-                    
+					if (context->top_frame->e_curr->LHSFlag()) {
+						lhs_expr = context->ExprStack.PeekBottom(0);
+						context->top_frame->lhs_size--;
+					}
+					if (context->top_frame->e_curr->RHSFlag()) {
+						rhs_expr = context->ExprStack.PeekTop(0);
+						context->top_frame->rhs_size--;
+					}
+
+#ifdef _DEBUG
+					const char* op_str = Operator::STR[context->top_frame->e_curr->op.index];
+					std::string lhs_str = context->top_frame->e_curr->LHSFlag() ? "<- L " + lhs_expr->ToString() : "";
+					std::string rhs_str = context->top_frame->e_curr->LHSFlag() ? "<- R " + rhs_expr->ToString() : "";
+					std::printf("%s  %s  %s\n", op_str, lhs_str.c_str(), rhs_str.c_str());
+#endif
+
+					Result result = Operator::FUNC[context->top_frame->e_curr->op.index](lhs_expr, rhs_expr, context);
+					if (lhs_expr) context->ExprStack.BottomPop();
+					if (rhs_expr) context->ExprStack.TopPop();
+
+					if (result.ErrorFlag()) {
+						// Error handling
+						std::printf("Handle Error");
+						break;
+					}
+
 					if (result.ExitFlag()) {
 						context->ExprStack.BottomPush(result.ReturnFlag() ? result.expr : Expr(nullptr));
 						context->top_frame->lhs_size++;
-                        break;
-                    }
-                    
+						break;
+					}
+
 					if (result.ReturnFlag()) {
 						std::printf("%s  ->  %s\n", result.expr.ToString().c_str(), context->top_frame->e_curr->SideFlag() ? "L" : "R");
 						if (context->top_frame->e_curr->SideFlag()) {
-                            context->ExprStack.BottomPush(result.expr); // Lhs
-                            context->top_frame->lhs_size++;
-                        }
-                        else {
-                            context->ExprStack.TopPush(result.expr); // Rhs
-                            context->top_frame->rhs_size++;
-                        }
-                    }
-					
+							context->ExprStack.BottomPush(result.expr); // Lhs
+							context->top_frame->lhs_size++;
+						}
+						else {
+							context->ExprStack.TopPush(result.expr); // Rhs
+							context->top_frame->rhs_size++;
+						}
+					}
+
 					if (result.JumpFlag()) {
 						int jump = context->top_frame->e_curr->op.jump;
 						for (int i = 0; i < abs(jump); i++) context->top_frame->e_curr = jump > 0 ? context->top_frame->e_curr->next : context->top_frame->e_curr->prev;
 						continue;
 					}
-                }
-                else // Expr
-                {
+				}
+				else // Expr
+				{
 					std::printf("%s  ->  %s\n", context->top_frame->e_curr->expr.ToString().c_str(), context->top_frame->e_curr->SideFlag() ? "L" : "R");
 					if (context->top_frame->e_curr->SideFlag()) {
-                        context->ExprStack.BottomPush(context->top_frame->e_curr->expr);
-                        context->top_frame->lhs_size++;
-                    }
-                    else {
-                        context->ExprStack.TopPush(context->top_frame->e_curr->expr);
-                        context->top_frame->rhs_size++;
-                    }
-                }
-            
-                context->top_frame->e_curr = context->top_frame->e_curr->next;
-            }
+						context->ExprStack.BottomPush(context->top_frame->e_curr->expr);
+						context->top_frame->lhs_size++;
+					}
+					else {
+						context->ExprStack.TopPush(context->top_frame->e_curr->expr);
+						context->top_frame->rhs_size++;
+					}
+				}
 
-            Expr returnExpr = context->ExprStack.BottomPop();
-            context->top_frame->lhs_size--;
+				context->top_frame->e_curr = context->top_frame->e_curr->next;
+			}
 
-            while (context->top_frame->lhs_size-- > 0) context->ExprStack.BottomPop();
-            while (context->top_frame->rhs_size-- > 0) context->ExprStack.TopPop();
+			Expr returnExpr = context->ExprStack.BottomPop();
+			context->top_frame->lhs_size--;
 
-            context->PopFrame();
+			while (context->top_frame->lhs_size-- > 0) context->ExprStack.BottomPop();
+			while (context->top_frame->rhs_size-- > 0) context->ExprStack.TopPop();
 
-            if (context->top_frame) {
-                if (returnSide == Frame::ReturnSide::LHS) {
-                    context->ExprStack.BottomPush(returnExpr);
-                    context->top_frame->lhs_size++;
-                }
-                else {
-                    context->ExprStack.TopPush(returnExpr);
-                    context->top_frame->rhs_size++;
-                }
-            }
-            else {
-                return returnExpr;
-            }
-        }
-        return Expr(nullptr);
-    }
+			context->PopFrame();
+
+			if (context->top_frame) {
+				if (returnSide == Frame::ReturnSide::LHS) {
+					context->ExprStack.BottomPush(returnExpr);
+					context->top_frame->lhs_size++;
+				}
+				else {
+					context->ExprStack.TopPush(returnExpr);
+					context->top_frame->rhs_size++;
+				}
+			}
+			else {
+				return returnExpr;
+			}
+		}
+		return Expr(nullptr);
+	}
 }

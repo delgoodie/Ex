@@ -1,11 +1,10 @@
+#include "Operations.h"
+
 #include "../Executor/ExecutorCore.h"
 
-#include "Conversion.h"
-
 namespace Operator {
-	Executor::Result Op_And (const Executor::Expr& lhs, const Executor::Expr& rhs,  Executor::Context* context) {
-		Executor::Expr c_lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_BOOLEAN, context);
-		Executor::Expr c_rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_BOOLEAN, context);
-		return Executor::Result(Executor::Expr(c_lhs.boolean && c_rhs.boolean));
+	Executor::Result Op_And(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context) {
+		CAST_PARAMS(Executor::Expr::Type::EX_BOOLEAN);
+		return Executor::Result(Executor::Expr(lhs->boolean && rhs->boolean));
 	}
 }

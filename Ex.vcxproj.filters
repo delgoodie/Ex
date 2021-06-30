@@ -72,9 +72,6 @@
     <ClCompile Include="src\Operator\Operations\Op_Add_l_r.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Add_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_And.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,7 +147,7 @@
     <ClCompile Include="src\Operator\Operations\Op_Subtract_r.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_While.cpp">
+    <ClCompile Include="src\Operator\Operations\Op_Catch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Conversion.cpp">
