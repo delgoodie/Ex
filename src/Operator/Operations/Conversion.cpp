@@ -5,9 +5,18 @@ namespace Operator {
 
 	namespace Conversion
 	{
+		size_t StringLength(Executor::StringLink* sl) {
+			int i = 0;
+			while (sl && sl->string[i % 5] != '\0') {
+				i++;
+				if (i > 0 && i % 5 == 0) sl = sl->next;
+			}
+			return i;
+		}
+
 		Executor::StringLink* StdStringToString(std::string string, Executor::Context* context)
 		{
-			Executor::StringLink* head = nullptr, * curr = context->StringHeap.Allocate(), * prev = nullptr;
+			Executor::StringLink* head = nullptr, *curr = context->StringHeap.Allocate(), *prev = nullptr;
 			int length = string.length();
 
 			for (int i = 0; i < length; i++) {
@@ -83,10 +92,11 @@ namespace Operator {
 			if (expr.variable.ptr) return expr.variable.ptr;
 			else {
 				Executor::VarLink* vl = context->top_frame->dot.variable.ptr->expr.object.v_head;
-				Executor::Expr v_name(expr.variable.name_head, -1), vl_name(vl->name, -1);
+				Executor::Expr v_name(expr.variable.name_head, StringLength(expr.variable.name_head)), vl_name(vl->name, StringLength(vl->name));
+
 				while (vl && !Op_EqualTo(&v_name, &vl_name, context).expr.boolean) {
 					vl = vl->next;
-					v_name = Executor::Expr(vl->name, -1);
+					v_name = Executor::Expr(vl->name, StringLength(vl->name));
 				}
 				return vl;
 			}

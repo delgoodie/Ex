@@ -39,7 +39,7 @@
     <ClCompile Include="src\Operator\Operations\Op_Access.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Access_l_r.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Access_r.cpp" />
-    <ClCompile Include="src\Operator\Operations\Op_Add_l_r.cpp" />
+    <ClCompile Include="src\Operator\Operations\Op_Add.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_And.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Assign.cpp" />
     <ClCompile Include="src\Operator\Operations\Op_Comma_l.cpp" />
@@ -112,7 +112,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{474cf115-022e-4e5d-9771-64efe7278e61}</ProjectGuid>
     <RootNamespace>Ex</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -131,7 +131,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">

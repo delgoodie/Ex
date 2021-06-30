@@ -5,29 +5,37 @@
 #include "../Executor/ExecutorCore.h"
 
 namespace Operator {
-	Executor::Result Op_Add_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context) {
-		// Cast var out of lhs, rhs might be new var
-		if (lhs->type == Executor::Expr::Type::EX_VARIABLE) *lhs = Conversion::ConvertVariable(*lhs, context);
+	Executor::Result Op_Add(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context) {
 
 		// Add property
-		if (lhs->type == Executor::Expr::Type::EX_OBJECT) {
+		if (lhs->type == Executor::Expr::Type::EX_OBJECT || lhs->type == Executor::Expr::Type::EX_VARIABLE && Conversion::FindVariable(*lhs, context)->expr.type == Executor::Expr::Type::EX_OBJECT) {
+
 			Executor::VarLink* vl = context->VarHeap.Allocate();
 			vl->expr = Executor::Expr(nullptr);
 			vl->prev = nullptr;
-			vl->next = lhs->object.v_head;
-
 			if (rhs->type == Executor::Expr::Type::EX_VARIABLE) vl->name = rhs->variable.name_head;
 			else if (rhs->type == Executor::Expr::Type::EX_STRING) vl->name = rhs->string.head;
 			else {
 				std::printf("Error trying to add variable to object that isn't var or string\n");
 			}
 
-			lhs->object.v_head = vl;
+			if (lhs->type == Executor::Expr::Type::EX_OBJECT) {
+				vl->next = lhs->object.v_head;
+				if (lhs->object.v_head) lhs->object.v_head->prev = vl;
+				lhs->object.v_head = vl;
+			}
+			else {
+				Executor::VarLink* varobj = Conversion::FindVariable(*lhs, context);
+				vl->next = varobj->expr.object.v_head;
+				if (varobj->expr.object.v_head) varobj->expr.object.v_head->prev = vl;
+				varobj->expr.object.v_head = vl;
+			}
+
+
 			return Executor::Result(Executor::Expr(vl->name, vl));
 		}
 
-		// If no property add, cast var out of rhs
-		if (rhs->type == Executor::Expr::Type::EX_VARIABLE) *rhs = Conversion::ConvertVariable(*rhs, context);
+		CAST_VARS;
 
 		// String Concat
 		if (lhs->type == Executor::Expr::Type::EX_STRING || rhs->type == Executor::Expr::Type::EX_STRING)
@@ -37,7 +45,7 @@ namespace Operator {
 
 			std::string sum = lhs->string.head->ToString() + rhs->string.head->ToString();
 
-			Executor::StringLink* head = nullptr, * curr = context->StringHeap.Allocate(), * prev = nullptr;
+			Executor::StringLink* head = nullptr, *curr = context->StringHeap.Allocate(), *prev = nullptr;
 			int length = sum.length();
 
 			for (int i = 0; i < length; i++) {
@@ -61,8 +69,7 @@ namespace Operator {
 		// Numeric Addition
 		else if (lhs->type == Executor::Expr::Type::EX_NUMBER || rhs->type == Executor::Expr::Type::EX_NUMBER) // Numerical Addition
 		{
-			*lhs = Conversion::Convert(lhs, Executor::Expr::Type::EX_NUMBER, context);
-			*rhs = Conversion::Convert(rhs, Executor::Expr::Type::EX_NUMBER, context);
+			CAST_PARAMS(Executor::Expr::Type::EX_NUMBER);
 			return Executor::Result(Executor::Expr(lhs->number + rhs->number));
 		}
 		// Bool OR
@@ -72,7 +79,7 @@ namespace Operator {
 		}
 		else
 		{
-			// unsuported value
+			// unsupported value
 			return Executor::Result(Executor::Expr(nullptr));
 		}
 	}

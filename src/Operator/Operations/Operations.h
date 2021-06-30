@@ -4,8 +4,8 @@
 
 #include "Conversion.h"
 
-#define CAST_PARAMS(TYPE) *lhs = Conversion::Convert(lhs, TYPE, context);\
-*rhs = Conversion::Convert(rhs, TYPE, context);
+#define CAST_PARAMS(TYPE) *lhs = Conversion::Convert(*lhs, TYPE, context);\
+*rhs = Conversion::Convert(*rhs, TYPE, context);
 
 #define CAST_VARS if (lhs->type == Executor::Expr::Type::EX_VARIABLE) *lhs = Conversion::ConvertVariable(*lhs, context);\
 if (rhs->type == Executor::Expr::Type::EX_VARIABLE) *rhs = Conversion::ConvertVariable(*rhs, context);
@@ -34,7 +34,7 @@ namespace Operator
 	Executor::Result Op_Multiply(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Divide(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Subtract_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
-	Executor::Result Op_Add_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Add(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Subtract_l_r(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
 	Executor::Result Op_LessThan(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
@@ -47,7 +47,7 @@ namespace Operator
 	Executor::Result Op_EqualTo(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_NotEqualTo(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
-	Executor::Result(* const FUNC[NUM_OPS])(Executor::Expr*, Executor::Expr*, Executor::Context*) = {
+	Executor::Result(*const FUNC[NUM_OPS])(Executor::Expr*, Executor::Expr*, Executor::Context*) = {
 		Op_False,                   // !   
 		Op_Access_l_r,              // .
 		Op_Access_r,                // .
@@ -61,7 +61,7 @@ namespace Operator
 		Op_Modulus,                 // %
 		Op_Multiply,                // *
 		Op_Divide,                  // /
-		Op_Add_l_r,                 // +
+		Op_Add,						// +
 		Op_Subtract_l_r,            // -
 		Op_LessThan,                // <
 		Op_GreaterThan,             // >

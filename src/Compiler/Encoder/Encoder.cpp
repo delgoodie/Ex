@@ -17,10 +17,10 @@ namespace Compiler
 		{
 			size += 1; // Flags
 			if (link->type == EvalLink_Comp::Type::OP)
-				size += 2 * sizeof(int); // op index & jump
+				size += sizeof(int) + sizeof(int); // op index & jump
 			else
 			{
-				size += 1; // Expr Type
+				size += sizeof(unsigned char); // Expr Type
 				switch (link->expr.type)
 				{
 				case Expr_Comp::Type::EX_BOOLEAN:
@@ -30,11 +30,13 @@ namespace Compiler
 					size += sizeof(ex_number_t);
 					break;
 				case Expr_Comp::Type::EX_STRING:
-				case Expr_Comp::Type::EX_VARIABLE:
 					size += link->expr.string.length() + 1;
 					break;
+				case Expr_Comp::Type::EX_VARIABLE:
+					size += link->expr.variable.length() + 1;
+					break;
 				case Expr_Comp::Type::EX_OBJECT:
-					size += EvalChainSize(link->expr.object);
+					size += sizeof(size_t) + EvalChainSize(link->expr.object);
 					break;
 				}
 			}
@@ -63,7 +65,8 @@ namespace Compiler
 		EvalLink_Comp* link = head;
 		while (link)
 		{
-			data[index++] = link->Flags(); // * Write Link Flags (1 byte)
+			data[index] = link->Flags(); // * Write Link Flags (1 byte)
+			index += sizeof(unsigned char);
 
 			if (link->type == EvalLink_Comp::Type::OP)
 			{
@@ -74,12 +77,14 @@ namespace Compiler
 			}
 			else
 			{
-				data[index++] = (unsigned char)link->expr.type; // * Write Expr Type (1 byte)
+				data[index] = (unsigned char)link->expr.type; // * Write Expr Type (1 byte)
+				index += sizeof(unsigned char);
 
 				switch (link->expr.type)
 				{
 				case Expr_Comp::Type::EX_BOOLEAN:
-					data[index++] = (link->expr.boolean ? 0xFF : 0x00); // * Write boolean (1 byte)
+					data[index] = (link->expr.boolean ? 0xFF : 0x00); // * Write boolean (1 byte)
+					index += sizeof(unsigned char);
 					break;
 				case Expr_Comp::Type::EX_NUMBER:
 					memcpy(&data[index], &link->expr.number, sizeof(ex_number_t)); // * Write number (8 bytes if ex_number_type == double)

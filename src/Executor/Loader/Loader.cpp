@@ -14,7 +14,7 @@ namespace Executor {
 	}
 
 	static Object LoadObject(unsigned char* ptr, Context* context) {
-		EvalLink* head = nullptr, * prev = nullptr, * curr = nullptr;
+		EvalLink* head = nullptr, *prev = nullptr, *curr = nullptr;
 		EvalLink link(*(ptr++));
 
 		while (!link.NullFlag()) {
@@ -47,11 +47,9 @@ namespace Executor {
 					ptr += link.expr.string.length + 1;
 					break;
 				case Expr::Type::EX_VARIABLE:
-					std::printf("found variable!\n");
 					link.expr.variable.name_head = LoadString(reinterpret_cast<char*>(ptr), context);
 					link.expr.variable.ptr = nullptr;
-					std::printf("variable name: %s\n", link.expr.variable.name_head->ToString().c_str());
-					ptr += strlen(reinterpret_cast<char*>(ptr));
+					ptr += strlen(reinterpret_cast<char*>(ptr)) + 1;
 					break;
 				case Expr::Type::EX_OBJECT:
 					size_t obj_size = *reinterpret_cast<size_t*>(ptr);

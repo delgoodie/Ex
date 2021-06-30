@@ -69,9 +69,6 @@
     <ClCompile Include="src\Operator\Operations\Op_Access_r.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Operator\Operations\Op_Add_l_r.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_And.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -157,6 +154,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Operator\Operations\Op_Jump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Add.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

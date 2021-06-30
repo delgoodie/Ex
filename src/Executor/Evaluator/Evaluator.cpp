@@ -32,7 +32,7 @@ namespace Executor {
 #ifdef _DEBUG
 					const char* op_str = Operator::STR[context->top_frame->e_curr->op.index];
 					std::string lhs_str = context->top_frame->e_curr->LHSFlag() ? "<- L " + lhs_expr->ToString() : "";
-					std::string rhs_str = context->top_frame->e_curr->LHSFlag() ? "<- R " + rhs_expr->ToString() : "";
+					std::string rhs_str = context->top_frame->e_curr->RHSFlag() ? "<- R " + rhs_expr->ToString() : "";
 					std::printf("%s  %s  %s\n", op_str, lhs_str.c_str(), rhs_str.c_str());
 #endif
 

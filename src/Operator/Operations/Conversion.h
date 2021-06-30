@@ -5,6 +5,7 @@
 namespace Operator {
 	namespace Conversion
 	{
+		size_t StringLength(Executor::StringLink* sl);
 		Executor::StringLink* StdStringToString(std::string string, Executor::Context* context);
 		Executor::Expr NumberToString(Executor::Expr expr, Executor::Context* context);
 		Executor::Expr StringToNumber(Executor::Expr expr);
