@@ -166,6 +166,7 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
+    <None Include="src\code.ex" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Compiler\Lexer\Lexer.h">

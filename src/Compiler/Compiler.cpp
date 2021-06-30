@@ -24,12 +24,13 @@ namespace Compiler {
 
 		EvalLink_Comp* eval_chain = Flatten(node_tree);
 
+
 		DEBUG_LOG(Debug::PrintLinkChain(eval_chain));
 
 		Blob blob = Encode(eval_chain);
 
 		DEBUG_LOG(Debug::PrintRawBlob(blob));
-		
+
 		return blob;
 	}
 }

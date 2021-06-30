@@ -14,37 +14,37 @@ namespace Compiler {
 		return size;
 	}
 
-    EvalLink_Comp* Flatten(Node_Comp* root)
-    {
-        EvalLink_Comp* head = nullptr, * prev = nullptr, * link = nullptr;
-        do
-        {
-            Node_Comp* deepest = root, * parent = nullptr;
-            // find deepest (highest prec node)
-            while (true)
-            {
+	EvalLink_Comp* Flatten(Node_Comp* root)
+	{
+		EvalLink_Comp* head = nullptr, * prev = nullptr, * link = nullptr;
+		do
+		{
+			Node_Comp* deepest = root, * parent = nullptr;
+			// find deepest (highest prec node)
+			while (true)
+			{
 				if (deepest->type == Node_Comp::Type::OP && Operator::POS[deepest->op.index] == -1 && !deepest->part_flattened) break;
 				else if (deepest->type == Node_Comp::Type::OP && Operator::POS[deepest->op.index] == 0 && !deepest->part_flattened && deepest->lhs->flattened) break;
-                
+
 				if (deepest->lhs && !deepest->lhs->flattened) {
-						parent = deepest;
-						deepest = deepest->lhs;
-                }
-                else if (deepest->rhs && !deepest->rhs->flattened)
-                {
-                    parent = deepest;
-                    deepest = deepest->rhs;
-                }
+					parent = deepest;
+					deepest = deepest->lhs;
+				}
+				else if (deepest->rhs && !deepest->rhs->flattened)
+				{
+					parent = deepest;
+					deepest = deepest->rhs;
+				}
 				else break;
-            }
+			}
 			// Check parent op for non 1 pos
-            if (parent && parent->type == Node_Comp::Type::OP && Operator::POS[parent->op.index] != 1 && deepest->side == Node_Comp::Side::RHS)
+			if (parent && parent->type == Node_Comp::Type::OP && Operator::POS[parent->op.index] != 1 && deepest->side == Node_Comp::Side::RHS)
 				deepest->side = parent->side;
 
-            // flatten node and add to chain
-            if (deepest->type == Node_Comp::Type::OP) {
+			// flatten node and add to chain
+			if (deepest->type == Node_Comp::Type::OP) {
 				if (Operator::POS[deepest->op.index] == 1) {
-                    link = new EvalLink_Comp(deepest->side == Node_Comp::Side::LHS ? EvalLink_Comp::Side::LHS : EvalLink_Comp::Side::RHS, deepest->lhs, deepest->rhs, deepest->op.index);
+					link = new EvalLink_Comp(deepest->side == Node_Comp::Side::LHS ? EvalLink_Comp::Side::LHS : EvalLink_Comp::Side::RHS, deepest->lhs, deepest->rhs, deepest->op.index);
 					deepest->flattened = true;
 				}
 				else {
@@ -60,20 +60,20 @@ namespace Compiler {
 						continue;
 					}
 				}
-            }
-            else if (deepest->type == Node_Comp::Type::EXPR) {
-                link = new EvalLink_Comp(deepest->side == Node_Comp::Side::LHS ? EvalLink_Comp::Side::LHS : EvalLink_Comp::Side::RHS, deepest->expr);
+			}
+			else if (deepest->type == Node_Comp::Type::EXPR) {
+				link = new EvalLink_Comp(deepest->side == Node_Comp::Side::LHS ? EvalLink_Comp::Side::LHS : EvalLink_Comp::Side::RHS, deepest->expr);
 				deepest->flattened = true;
-            }
+			}
 
 			// Link Chain
-            if (!prev) head = link;
-            else prev->next = link;
-            prev = link;
-        } while (!root->flattened);
+			if (!prev) head = link;
+			else prev->next = link;
+			prev = link;
+		} while (!root->flattened);
 
-        return head;
-    }
+		return head;
+	}
 
 	namespace Debug {
 		void PrintLinkChain(EvalLink_Comp* head)
