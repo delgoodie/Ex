@@ -6,37 +6,6 @@
 
 namespace Operator {
 	Executor::Result Op_Add(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context) {
-
-		// Add property
-		if (lhs->type == Executor::Expr::Type::EX_OBJECT || lhs->type == Executor::Expr::Type::EX_VARIABLE && ((lhs->variable.link && lhs->variable.link->expr.type == Executor::Expr::Type::EX_OBJECT) || Conversion::FindVariable(*lhs, context->top_frame->dot.variable.link->expr.object.v_head, context)->expr.type == Executor::Expr::Type::EX_OBJECT)) {
-
-			Executor::VarLink* vl = context->VarHeap.Allocate();
-			vl->expr = Executor::Expr(nullptr);
-			vl->prev = nullptr;
-			if (rhs->type == Executor::Expr::Type::EX_VARIABLE) vl->name = rhs->variable.name_head;
-			else if (rhs->type == Executor::Expr::Type::EX_STRING) vl->name = rhs->string.head;
-			else {
-				std::printf("Error trying to add variable to object that isn't var or string\n");
-			}
-
-			if (lhs->type == Executor::Expr::Type::EX_OBJECT) {
-				vl->next = lhs->object.v_head;
-				if (lhs->object.v_head) lhs->object.v_head->prev = vl;
-				lhs->object.v_head = vl;
-			}
-			else {
-				Executor::VarLink* varobj;
-				if (lhs->variable.link) varobj = lhs->variable.link;
-				else varobj = Conversion::FindVariable(*lhs, context->top_frame->dot.variable.link->expr.object.v_head, context);
-				vl->next = varobj->expr.object.v_head;
-				if (varobj->expr.object.v_head) varobj->expr.object.v_head->prev = vl;
-				varobj->expr.object.v_head = vl;
-			}
-
-
-			return Executor::Result(Executor::Expr(vl->name, vl));
-		}
-
 		CAST_VARS;
 
 		// String Concat
