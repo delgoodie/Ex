@@ -15,6 +15,8 @@ namespace Operator
 		".",  // access (.)         - "this"
 		"^",  // eval with parameter
 		"^",  // eval
+		"++", // increment
+		"--", // decrement
 		"#",  // sizeof
 		"-",  // negate, delete
 		"!",  // not
@@ -36,10 +38,10 @@ namespace Operator
 		"|",  // else
 		"=",  // assign
 		"->", // return
-		",",  // separate (lhs, rhs)
-		",",  // separate (lhs,)
-		";"   // jump
 		":",  // catch
+		";",  // jump
+		",",  // separate (lhs, rhs)
+		","   // separate (lhs,)
 	};
 
 	const int PREC[NUM_OPS] = {
@@ -51,31 +53,33 @@ namespace Operator
 		2,  // .
 		3,  // ^
 		3,  // ^
-		4,  // #
-		4,  // -
-		5,  // !
-		6,  // **
-		6,  // %
-		7,  // *
-		7,  // /
-		8,  // +
-		8,  // -
-		9,  // <
-		9,  // >
-		9,  // <=
-		9,  // >=
-		9,  // ==
-		9,  // !=
-		10, // &&
-		11, // ||
-		12, // ?
-		13, // |
-		14, // =
-		15, // ->
-		20, // ,
-		20, // ,
-		-1, // ;
-		-1	// :s
+		4,  // ++
+		4,  // --
+		5,  // #
+		5,  // -
+		6,  // !
+		7,  // **
+		7,  // %
+		8,  // *
+		8,  // /
+		9,  // +
+		9,  // -
+		10,  // <
+		10,  // >
+		10,  // <=
+		10,  // >=
+		10,  // ==
+		10,  // !=
+		11, // &&
+		12, // ||
+		13, // ?
+		14, // |
+		15, // =
+		16, // ->
+		17,	// :
+		4, // ;
+		18, // ,
+		18  // ,
 	};
 
 	const bool LHS[NUM_OPS] = {
@@ -87,6 +91,8 @@ namespace Operator
 		false, // .
 		true,  // ^
 		false, // ^
+		true,  // ++
+		true,  // --
 		false, // #
 		false, // -
 		false, // !
@@ -108,21 +114,23 @@ namespace Operator
 		true,  // |
 		true,  // =
 		false, // ->
+		false, // :
+		true,  // ;
 		true,  // ,
-		true,  // ,
-		false, // ;
-		false  // :
+		true   // ,
 	};
 
 	const bool RHS[NUM_OPS] = {
 		false, // $
 		false, // !
 		true,  // .
-		false,  // .
+		false, // .
 		true,  // .
 		false, // .
 		true,  // ^
 		true,  // ^
+		false, // ++
+		false, // --
 		true,  // #
 		true,  // -
 		true,  // !
@@ -144,10 +152,10 @@ namespace Operator
 		true,  // |
 		true,  // =
 		true,  // ->
-		true,  // ,
-		false, // ,
+		true,  // :
 		false, // ;
-		false  // :
+		true,  // ,
+		false  // ,
 	};
 
 	const int POS[NUM_OPS] = {
@@ -159,6 +167,8 @@ namespace Operator
 		1, // .
 		1, // ^
 		1, // ^
+		1, // ++
+		1, // --
 		1, // #
 		1, // -
 		1, // !
@@ -180,9 +190,9 @@ namespace Operator
 		0, // |
 		1, // =
 		1, // ->
-		1, // ,
-		1, // ,
+		0, // :
 		1, // ;
-		1  // :
+		0, // ,
+		0  // ,
 	};
 }

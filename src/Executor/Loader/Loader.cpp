@@ -9,12 +9,11 @@ namespace Executor {
 
 	static StringLink* LoadString(char* string, Context* context) {
 		std::string stdstr = std::string(string);
-		std::printf("found string: %s\n", string);
 		return Operator::Conversion::StdStringToString(stdstr, context);
 	}
 
 	static Object LoadObject(unsigned char* ptr, Context* context) {
-		EvalLink* head = nullptr, * prev = nullptr, * curr = nullptr;
+		EvalLink* head = nullptr, *prev = nullptr, *curr = nullptr;
 		EvalLink link(*(ptr++));
 
 		while (!link.NullFlag()) {

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <regex>
 #include <fstream>
+#include <chrono>
 
 #include "Core.h"
 #include "Compiler/Compiler.h"
@@ -13,7 +14,9 @@ int main(int argc, char* argv[]) {
 		char* code_buffer = nullptr;
 
 		if (std::regex_match(argv[1], std::regex("[\\\\\\w :.]+\\.ex"))) {
+#ifdef _DEBUG
 			std::printf("Evaluating file: \"%s\"\n", argv[1]);
+#endif
 
 			std::ifstream code_file(argv[1], std::ios::binary | std::ios::ate);
 
@@ -27,7 +30,9 @@ int main(int argc, char* argv[]) {
 					code_buffer = new char[code_char_vec.size() + 1];
 					for (int i = 0; i < code_char_vec.size(); i++) code_buffer[i] = code_char_vec[i];
 					code_buffer[code_char_vec.size()] = '\0';
+#ifdef _DEBUG
 					std::printf("\"\"\"\n%s\n\"\"\"\n", code_buffer);
+#endif
 				}
 				else {
 					std::printf("Vector file read failed\n");
@@ -44,10 +49,27 @@ int main(int argc, char* argv[]) {
 			code_buffer = argv[1];
 		}
 
+		long long compileDuration, executionDuration;
+
+		auto start = std::chrono::high_resolution_clock::now();
 
 		Blob blob = Compiler::Compile(code_buffer);
 
+		auto stop = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+		compileDuration = duration.count() / 1000;
+
+		start = std::chrono::high_resolution_clock::now();
+
 		Executor::Execute(blob);
+
+		stop = std::chrono::high_resolution_clock::now();
+		duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+		executionDuration = duration.count() / 1000;
+
+		std::printf("Compile Duration: %d ms\n", compileDuration);
+		std::printf("Execution Duration: %d ms\n", executionDuration);
+
 
 		return 0;
 	}

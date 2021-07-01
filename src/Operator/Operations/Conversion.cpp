@@ -92,6 +92,8 @@ namespace Operator {
 		}
 
 		Executor::VarLink* FindVariable(Executor::Expr expr, Executor::VarLink* v_head, Executor::Context* context) {
+			if (!v_head) return nullptr;
+
 			if (expr.type == Executor::Expr::Type::EX_VARIABLE) expr = Executor::Expr(expr.variable.name_head, StringLength(expr.variable.name_head));
 
 			if (expr.type == Executor::Expr::Type::EX_STRING) {
@@ -100,7 +102,7 @@ namespace Operator {
 
 				while (vl && !Op_EqualTo(&expr, &vl_name, context).expr.boolean) {
 					vl = vl->next;
-					if(vl) 
+					if (vl)
 						vl_name = Executor::Expr(vl->name, StringLength(vl->name));
 				}
 				return vl;

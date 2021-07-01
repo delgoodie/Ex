@@ -24,7 +24,7 @@ namespace Compiler {
 			while (true)
 			{
 				if (deepest->type == Node_Comp::Type::OP && Operator::POS[deepest->op.index] == -1 && !deepest->part_flattened) break;
-				else if (deepest->type == Node_Comp::Type::OP && Operator::POS[deepest->op.index] == 0 && !deepest->part_flattened && deepest->lhs->flattened) break;
+				else if (deepest->type == Node_Comp::Type::OP && Operator::POS[deepest->op.index] == 0 && !deepest->part_flattened && (!deepest->lhs ||deepest->lhs->flattened)) break;
 
 				if (deepest->lhs && !deepest->lhs->flattened) {
 					parent = deepest;

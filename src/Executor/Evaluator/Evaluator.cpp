@@ -81,7 +81,9 @@ namespace Executor {
 				}
 				else // Expr
 				{
+#ifdef _DEBUG
 					std::printf("%s  ->  %s\n", context->top_frame->e_curr->expr.ToString().c_str(), context->top_frame->e_curr->SideFlag() ? "L" : "R");
+#endif
 					if (context->top_frame->e_curr->SideFlag()) {
 						context->ExprStack.BottomPush(context->top_frame->e_curr->expr);
 						context->top_frame->lhs_size++;

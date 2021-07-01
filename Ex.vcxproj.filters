@@ -165,6 +165,12 @@
     <ClCompile Include="src\Operator\Operations\Op_Subtract_Unary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Increment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Operator\Operations\Op_Decrement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

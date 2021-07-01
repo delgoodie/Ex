@@ -5,6 +5,8 @@
 
 #include "Conversion.h"
 
+#define CATCH_INDEX 31
+
 #define CAST_PARAMS(TYPE) *lhs = Conversion::Convert(*lhs, TYPE, context);\
 *rhs = Conversion::Convert(*rhs, TYPE, context);
 
@@ -41,6 +43,8 @@ namespace Operator
 	Executor::Result Op_Divide(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Subtract_Unary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_Subtract_Binary(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Increment(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
+	Executor::Result Op_Decrement(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 
 	Executor::Result Op_LessThan(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
 	Executor::Result Op_GreaterThan(Executor::Expr* lhs, Executor::Expr* rhs, Executor::Context* context);
@@ -61,6 +65,8 @@ namespace Operator
 		Op_Access_Nullary,          // .
 		Op_Eval_l_r,                // ^
 		Op_Eval_r,                  // ^
+		Op_Increment,				// ++
+		Op_Decrement,				// --
 		Op_SizeOf,                  // #
 		Op_Subtract_Unary,          // -
 		Op_Not,                     // !
@@ -82,9 +88,9 @@ namespace Operator
 		Op_Else,                    // |
 		Op_Assign,                  // =
 		Op_Return,                  // ->
-		Op_Comma_Binary,            // ,
-		Op_Comma_Unary,             // ,
+		Op_Catch,					// :
 		Op_Jump,					// ;
-		Op_Catch					// :
+		Op_Comma_Binary,            // ,
+		Op_Comma_Unary              // ,
 	};
 }
