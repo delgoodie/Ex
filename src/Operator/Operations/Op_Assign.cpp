@@ -8,6 +8,9 @@ namespace Operator {
 			Executor::VarLink* vl;
 			if (lhs->variable.link) vl = lhs->variable.link;
 			else vl = Conversion::FindVariable(*lhs, context->top_frame->dot.variable.link->expr.object.v_head, context);
+
+			if (rhs->type == Executor::Expr::Type::EX_VARIABLE) *rhs = Conversion::ConvertVariable(*rhs, context);
+
 			vl->expr = *rhs;
 			return Executor::Result(Executor::Expr(lhs->variable.name_head, vl));
 		}

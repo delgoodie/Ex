@@ -25,19 +25,19 @@ static void PrintSpaces(int num_spaces)
 
 
 namespace Compiler {
-    Node_Comp* Expand(std::vector<Node_Comp>& node_flat)
-    {
-        if (node_flat.size() == 0)
-            std::printf("0 nodes\n");
+	Node_Comp* Expand(std::vector<Node_Comp>& node_flat)
+	{
+		if (node_flat.size() == 0)
+			std::printf("0 nodes\n");
 		// Iterate over non-ops and set expanded to true
 		for (int i = 0; i < node_flat.size(); i++) if (node_flat[i].type == Node_Comp::Type::EXPR) node_flat[i].expanded = true;
 
-        // Iterate over ops and expand by prec
-        while (node_flat.size() > 1)
-        {
-            int mindex = -1;
+		// Iterate over ops and expand by prec
+		while (node_flat.size() > 1)
+		{
+			int mindex = -1;
 
-            // find highest prec unexpanded op
+			// find highest prec unexpanded op
 			for (int i = 0; i < node_flat.size(); i++)
 			{
 				bool isOp = node_flat[i].type == Node_Comp::Type::OP;
@@ -47,47 +47,47 @@ namespace Compiler {
 				bool mindexGood = mindex == -1 || Operator::PREC[node_flat[i].op.index] < Operator::PREC[node_flat[mindex].op.index];
 
 				if (isOp && isntExpanded && lhsGood && rhsGood && mindexGood)
-						mindex = i;
+					mindex = i;
 			}
 			/*
-                if (node_flat[i].type == Node::Type::OP &&
-                    !node_flat[i].expanded &&
-                    (!Operator::LHS[node_flat[i].op.index] || i > 0 && node_flat[i - 1].expanded) &&
-                    (!Operator::RHS[node_flat[i].op.index] || i + 1 < node_flat.size() && node_flat[i + 1].expanded) &&
-                    (mindex == -1 || Operator::PREC[node_flat[i].op.index] < Operator::PREC[node_flat[mindex].op.index]))
-                    mindex = i;
+				if (node_flat[i].type == Node::Type::OP &&
+					!node_flat[i].expanded &&
+					(!Operator::LHS[node_flat[i].op.index] || i > 0 && node_flat[i - 1].expanded) &&
+					(!Operator::RHS[node_flat[i].op.index] || i + 1 < node_flat.size() && node_flat[i + 1].expanded) &&
+					(mindex == -1 || Operator::PREC[node_flat[i].op.index] < Operator::PREC[node_flat[mindex].op.index]))
+					mindex = i;
 			*/
 
-            if (mindex == -1)
-            {
-                // TODO: throw
-                std::printf("2+ unmergable nodes\n");
-            }
-            else
-            {
-                // RHS first because index shifts when LHS removed
-                if (Operator::RHS[node_flat[mindex].op.index])
-                {
-                    Node_Comp* rhs = new Node_Comp(node_flat[mindex + 1]);
+			if (mindex == -1)
+			{
+				// TODO: throw
+				std::printf("2+ unmergable nodes\n");
+			}
+			else
+			{
+				// RHS first because index shifts when LHS removed
+				if (Operator::RHS[node_flat[mindex].op.index])
+				{
+					Node_Comp* rhs = new Node_Comp(node_flat[mindex + 1]);
 					rhs->side = Node_Comp::Side::RHS;
-                    node_flat.erase(node_flat.begin() + mindex + 1);
-                    node_flat[mindex].rhs = rhs;
-                }
-                if (Operator::LHS[node_flat[mindex].op.index])
-                {
-                    Node_Comp* lhs = new Node_Comp(node_flat[mindex - 1]);
+					node_flat.erase(node_flat.begin() + mindex + 1);
+					node_flat[mindex].rhs = rhs;
+				}
+				if (Operator::LHS[node_flat[mindex].op.index])
+				{
+					Node_Comp* lhs = new Node_Comp(node_flat[mindex - 1]);
 					lhs->side = Node_Comp::Side::LHS;
 					node_flat.erase(node_flat.begin() + mindex - 1);
-                    mindex--;
-                    node_flat[mindex].lhs = lhs;
-                }
-                node_flat[mindex].expanded = true;
-            }
-        }
+					mindex--;
+					node_flat[mindex].lhs = lhs;
+				}
+				node_flat[mindex].expanded = true;
+			}
+		}
 
 		node_flat[0].side = Node_Comp::Side::LHS;
-        return new Node_Comp(node_flat[0]);
-    }
+		return new Node_Comp(node_flat[0]);
+	}
 
 	namespace Debug {
 		void PrintNodeTree(Node_Comp* root)

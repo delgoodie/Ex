@@ -55,6 +55,8 @@ namespace Executor {
 		Expr(Object o) : type(Type::EX_OBJECT), object(o) {}
 		Expr(std::nullptr_t null) : type(Type::EX_NULL) {}
 
+		static std::string TypeToString(Type);
+
 		std::string ToString() const;
 	};
 

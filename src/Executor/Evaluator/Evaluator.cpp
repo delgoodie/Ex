@@ -99,7 +99,7 @@ namespace Executor {
 
 			Expr returnExpr = context->ExprStack.BottomPop();
 			context->top_frame->lhs_size--;
-			if (returnExpr.type == Expr::Type::EX_VARIABLE && !returnExpr.variable.link) returnExpr.variable.link = Operator::Conversion::FindVariable(returnExpr.variable.name_head, context->top_frame->dot.variable.link->expr.object.v_head, context);
+			if (returnExpr.type == Expr::Type::EX_VARIABLE && !returnExpr.variable.link) returnExpr.variable.link = Operator::Conversion::FindVariable(returnExpr, context->top_frame->dot.variable.link->expr.object.v_head, context);
 
 #ifdef _DEBUG
 			std::printf("(return)  <-  L %s\n", returnExpr.ToString().c_str());

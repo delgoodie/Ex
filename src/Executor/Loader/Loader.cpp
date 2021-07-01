@@ -14,7 +14,7 @@ namespace Executor {
 	}
 
 	static Object LoadObject(unsigned char* ptr, Context* context) {
-		EvalLink* head = nullptr, *prev = nullptr, *curr = nullptr;
+		EvalLink* head = nullptr, * prev = nullptr, * curr = nullptr;
 		EvalLink link(*(ptr++));
 
 		while (!link.NullFlag()) {
@@ -108,12 +108,11 @@ namespace Executor {
 					std::printf("%p\n", &context->EvalHeap.Begin()[i]);
 					std::printf("%p    ", el.prev);
 					std::printf("%s  ", el.SideFlag() ? "L" : "R");
-					std::printf("%s  ", el.TypeFlag() ? "OP" : "EXPR");
 					if (el.TypeFlag()) {
-						std::printf("%s  %s %s", Operator::STR[el.op.index], el.LHSFlag() ? "L" : "", el.RHSFlag() ? "R" : "");
+						std::printf("OP  %s  %s %s", Operator::STR[el.op.index], el.LHSFlag() ? "L" : "", el.RHSFlag() ? "R" : "");
 					}
 					else {
-						std::printf("%s", el.expr.ToString().c_str());
+						std::printf("%s  %s", Expr::TypeToString(el.expr.type).c_str(), el.expr.ToString().c_str());
 					}
 					std::printf("    %p\n\n", el.next);
 				}

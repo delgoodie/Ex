@@ -17,4 +17,22 @@ namespace Executor {
 		else if (type == Type::EX_OBJECT) return "{ " + object.e_head->ToString() + "}";
 		else return "no type";
 	}
+
+	std::string Expr::TypeToString(Type type) {
+		switch (type) {
+		case Type::EX_NULL:
+			return "NULL";
+		case Type::EX_BOOLEAN:
+			return "BOOL";
+		case Type::EX_NUMBER:
+			return "NUM";
+		case Type::EX_STRING:
+			return "STR";
+		case Type::EX_VARIABLE:
+			return "VAR";
+		case Type::EX_OBJECT:
+			return "OBJ";
+		}
+	}
+
 }

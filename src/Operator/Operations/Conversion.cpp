@@ -100,7 +100,8 @@ namespace Operator {
 
 				while (vl && !Op_EqualTo(&expr, &vl_name, context).expr.boolean) {
 					vl = vl->next;
-					vl_name = Executor::Expr(vl->name, StringLength(vl->name));
+					if(vl) 
+						vl_name = Executor::Expr(vl->name, StringLength(vl->name));
 				}
 				return vl;
 			}
